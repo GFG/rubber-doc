@@ -1,2 +1,6 @@
-# ROCKETLABSRUBBERDOC
-RocketLabsRubberDoc by nicolo.pignatelli
+# RocketLabsRubberDoc
+
+## How to get started
+ - clone repository
+ - make install
+ - go run main.go help
