@@ -1,6 +1,12 @@
-hash: 43e4cd6f0456652ef009ed2e7884bf0cf59e43da5f5f60d201e467a6a52e4ef4
-updated: 2017-01-23T11:06:26.438338887+01:00
+hash: e7b503a7e348174bdf056274964d1e853097c0ee0cb2ffd4b128b875cbeef306
+updated: 2017-01-23T15:32:18.383428848+01:00
 imports:
+- name: github.com/buddhamagnet/yaml
+  version: 8e72a68a3483a9d044e4c6f49cc695b5ee60c671
+- name: github.com/Jumpscale/go-raml
+  version: 59a4bff6b7aa034e34e56fe0adfc29ec1ec9dcb5
+  subpackages:
+  - raml
 - name: github.com/Sirupsen/logrus
   version: d26492970760ca5d33129d2d799e34be5c4782eb
 - name: github.com/urfave/cli

@@ -2,12 +2,14 @@ package commands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser"
 )
 
-const BLUEPRINT = "blueprint"
+const (
+	BLUEPRINT = "blueprint"
+	RAML = "raml"
+)
 
 type GenerateCommand struct {
 	InputFormat  string
@@ -16,24 +18,29 @@ type GenerateCommand struct {
 	OutputDir    string
 }
 
-func (c *GenerateCommand) Execute() error {
+func (c *GenerateCommand) Execute() (err error) {
 	if c.InputFormat == BLUEPRINT {
-		f, err := os.Open(c.Src)
+		var spec parser.Specification
+		bpParser := parser.NewBlueprintParser()
 
-		if err != nil {
-			return fmt.Errorf("Failed to open provided file: %s", c.Src)
+		if spec, err = bpParser.Parse(c.Src, new(parser.BlueprintFormatter)); err != nil {
+			return
 		}
 
-		defer f.Close()
-		bpParser := parser.Blueprint{}
-		bp, err := bpParser.Parse(f)
-
-		if err != nil {
-			return err
-		}
-
-		bpParser.PrintRecursiveMap(bp)
+		fmt.Printf("%+v\n", spec)
 	}
 
-	return nil
+	if c.InputFormat == RAML {
+		var spec parser.Specification
+		rParser := parser.NewRamlParser()
+
+		if spec, err = rParser.Parse(c.Src, new(parser.RamlFormatter)); err != nil {
+			return
+		}
+
+		fmt.Printf("%+v\n", spec)
+	}
+
+	return
 }
+
