@@ -4,6 +4,10 @@ import:
   version: ^0.11.0
 - package: github.com/urfave/cli
   version: ^1.19.1
+- package: github.com/Jumpscale/go-raml
+  version: ^0.1.0
+  subpackages:
+  - raml
 testImport:
 - package: github.com/stretchr/testify
   subpackages:
