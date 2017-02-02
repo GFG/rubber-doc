@@ -11,21 +11,26 @@ package parser
 */
 import "C"
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"unsafe"
+
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/walker"
 )
 
-type BlueprintAPIParser struct {}
+type BlueprintParser struct{}
 
-func NewBlueprintParser() *BlueprintAPIParser {
-	return &BlueprintAPIParser{}
+func NewBlueprintParser() Parser {
+	return &BlueprintParser{}
 }
 
-func (bp BlueprintAPIParser) Parse(filename string, formatter Formatter) (spec Specification, err error) {
+func (bp BlueprintParser) Parse(filename string, tra transformer.Transformer) (def *definition.Api, err error) {
 	var raw []byte
-	var data map[string]interface{}
+	var data interface{}
 
 	if raw, err = ioutil.ReadFile(filename); err != nil {
 		return
@@ -43,14 +48,14 @@ func (bp BlueprintAPIParser) Parse(filename string, formatter Formatter) (spec S
 		return
 	}
 
-	if err = json.Unmarshal(bp.serialize(result), &data); err == nil {
-		spec = formatter.Format(data)
+	if err = json.NewDecoder(bytes.NewReader(bp.serialize(result))).Decode(&data); err == nil {
+		def = tra.Transform(walker.NewObjectWalker(data))
 	}
 
 	return
 }
 
-func (bp BlueprintAPIParser) serialize(drafterResult *C.drafter_result) ([]byte) {
+func (bp BlueprintParser) serialize(drafterResult *C.drafter_result) []byte {
 
 	opts := C.drafter_serialize_options{sourcemap: false, format: C.DRAFTER_SERIALIZE_JSON}
 
