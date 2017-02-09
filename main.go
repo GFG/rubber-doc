@@ -4,7 +4,7 @@ import (
 	"os"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/commands"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/command"
 	"github.com/urfave/cli"
 )
 
@@ -12,7 +12,7 @@ var Version = "0.1.0-Dev"
 var ApplicationName = "Rubber Doc - A simple documentation generator"
 
 var (
-	GenerateCommand = &commands.GenerateCommand{}
+	GenerateCommand = &command.GenerateCommand{}
 )
 
 func main() {
@@ -45,12 +45,6 @@ func main() {
 			Usage: "Generates an output (e.g html file) based on input format (e.g. blueprint)",
 
 			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:        "input-format",
-					Value:       "blueprint",
-					Usage:       "Specification format. e.g. blueprint or raml.",
-					Destination: &GenerateCommand.InputFormat,
-				},
 				cli.StringFlag{
 					Name:        "src",
 					Value:       "",

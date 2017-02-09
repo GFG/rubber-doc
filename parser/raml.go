@@ -2,22 +2,27 @@ package parser
 
 import (
 	"github.com/Jumpscale/go-raml/raml"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 )
 
-type RamlAPIParser struct {}
+// RamlParser
+type RamlParser struct{}
 
-func NewRamlParser() *RamlAPIParser {
-	return &RamlAPIParser{}
+// NewRamlParser
+func NewRamlParser() Parser {
+	return &RamlParser{}
 }
 
-func (rp RamlAPIParser) Parse(filename string, formatter Formatter) (spec Specification, err error) {
-	var data *raml.APIDefinition
+// Parse
+func (rp RamlParser) Parse(filename string, tra transformer.Transformer) (def *definition.Api, err error) {
+	data, err := raml.ParseFile(filename)
 
-	if data, err = raml.ParseFile(filename); err != nil {
+	if err != nil {
 		return
 	}
 
-	spec = formatter.Format(*data)
+	def = tra.Transform(*data)
 
 	return
 }

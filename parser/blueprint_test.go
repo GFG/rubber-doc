@@ -3,15 +3,21 @@ package parser
 import (
 	"testing"
 
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBlueprintParser(t *testing.T) {
-	p := NewBlueprintParser()
-	f := new(BlueprintFormatter)
+func TestBlueprintParser_Parse(t *testing.T) {
+	expected := &definition.Api{
+		Title: "Real World API",
+	}
 
-	spec, err := p.Parse("testdata/blueprint/simple.apib", *f)
+	p := NewBlueprintParser()
+
+	def, err := p.Parse("testdata/blueprint/simple.apib", transformer.NewBlueprintTransformer())
 
 	assert.Nil(t, err, "Blueprint parsing failed")
-	assert.IsType(t, Specification{}, spec)
+	assert.IsType(t, &definition.Api{}, def)
+	assert.Equal(t, expected, def)
 }
