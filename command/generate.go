@@ -1,12 +1,12 @@
 package command
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
-	"errors"
 )
 
 const (

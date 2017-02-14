@@ -22,12 +22,15 @@ import (
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/walker"
 )
 
+//BlueprintParser Concrete's parser definition
 type BlueprintParser struct{}
 
+//NewBlueprintParser Creates a blueprint parser
 func NewBlueprintParser() Parser {
 	return &BlueprintParser{}
 }
 
+//Parse Concrete implementation of the Parser.Parse method
 func (bp BlueprintParser) Parse(filename string, tra transformer.Transformer) (def *definition.Api, err error) {
 	var raw []byte
 	var data interface{}

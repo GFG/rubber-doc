@@ -1,0 +1,9 @@
+#%RAML 1.0 Library
+traits:
+  secured:
+    usage: Apply to methods needing security - do not forget to also add securedBy!
+    headers:
+      Authorization:
+        type: string
+        displayName: Authorization
+        example: Bearer czZCaGRSa3F0MzpnWDFmQmF0M2JW

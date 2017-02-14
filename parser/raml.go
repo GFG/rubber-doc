@@ -6,23 +6,23 @@ import (
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 )
 
-// RamlParser
+//RamlParser  Concrete's parser definition
 type RamlParser struct{}
 
-// NewRamlParser
+//NewRamlParser Creates a raml parser
 func NewRamlParser() Parser {
 	return &RamlParser{}
 }
 
-// Parse
+//Parse Concrete implementation of the Parser.Parse method
 func (rp RamlParser) Parse(filename string, tra transformer.Transformer) (def *definition.Api, err error) {
-	data, err := raml.ParseFile(filename)
+	ramlDef := new(raml.APIDefinition)
 
-	if err != nil {
+	if err = raml.ParseFile(filename, ramlDef); err != nil {
 		return
 	}
 
-	def = tra.Transform(*data)
+	def = tra.Transform(*ramlDef)
 
 	return
 }
