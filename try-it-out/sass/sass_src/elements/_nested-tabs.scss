@@ -1,0 +1,95 @@
+.rd-nested-tabs-item {
+  overflow: hidden;
+  width: 146px;
+  float: left;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+  height: 24px;
+  color: $rdColorExtraLight;
+  font-size: $rdFontSizeDefault;
+  line-height: 16px;
+  font-weight: bold;
+  letter-spacing: .5px;
+  text-decoration: none;
+
+  .rd-nested-tabs-item-inner {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    padding-top: 7px;
+    text-align: center;
+    text-transform: uppercase;
+
+    &::before {
+      content: '';
+      height: 45px;
+      border-radius: 4px;
+      margin: -1px 10px 0;
+      -webkit-transform: perspective(45px) rotateX(30deg);
+      -moz-transform: perspective(45px) rotateX(30deg);
+      -ms-transform: perspective(45px) rotateX(30deg);
+      width: 128px;
+      position: absolute;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      background: $rdColorDark;
+    }
+  }
+
+  &:hover .rd-nested-tabs-item-inner::before {
+    background: lighten($rdColorDark, 5);
+  }
+}
+
+a.rd-nested-tabs-item-inner {
+  color: $rdColorExtraLight;
+  text-decoration: none;
+}
+
+@each $name, $color in $rdColorHttpVerbs {
+  .rd-nested-tabs-item.rd-item-#{$name} .rd-nested-tabs-item-inner::before {
+    background: $color;
+  }
+
+  .rd-nested-tabs-item.rd-item-#{$name}:hover .rd-nested-tabs-item-inner::before {
+    background: lighten($color, 5);
+  }
+}
+
+ul.rd-nested-tabs-nav {
+  position: absolute;
+  float: left;
+  right: 9px;
+  bottom: -1px;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  li.rd-nested-tabs-item {
+    padding: 0;
+    margin: 0 -17px 0 -8px; //overlap the items
+    float: left;
+
+    .rd-close {
+      display: none;
+    }
+
+    &.rd-active {
+      z-index: 5;
+
+      .rd-close {
+        display: block;
+        position: absolute;
+        z-index: 10;
+        right: 24px;
+        bottom: 2px;
+        font-weight: bold;
+        font-size: 12px;
+        color: $rdColorExtraLight;
+      }
+    }
+  }
+}
+

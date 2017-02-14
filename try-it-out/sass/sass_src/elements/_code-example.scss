@@ -1,0 +1,13 @@
+.rd-code-example {
+  background-color: $rdColorLight;
+  border: 1px solid $rdColorMediumLight;
+  padding: $rdSpacingL;
+}
+
+.rd-code-example-item {
+  display: none;
+
+  &.show {
+    display: block;
+  }
+}

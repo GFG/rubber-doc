@@ -2,3 +2,5 @@
 vendor
 
 ext/drafter/build/*
+
+try-it-out/sass/.sass_src/

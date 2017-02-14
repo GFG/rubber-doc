@@ -1,0 +1,28 @@
+.rd-info-label {
+  display: inline-block;
+  padding: $rdSpacingXS $rdSpacingL;
+  border: 1px solid $rdColorMediumLight;
+  border-radius: $rdLabelsBorderRadius;
+  background: $rdColorMediumLight;
+  color: $rdColorDark;
+  font-size: $rdFontSizeDefault;
+  text-transform: none;
+  margin-right: $rdSpacingL;
+
+  &.rd-active {
+    background: $rdColorAccent;
+    border: 1px solid $rdColorAccent;
+    color: $rdColorExtraLight;
+  }
+}
+
+a.rd-info-label {
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background: $rdColorAccent;
+    border: 1px solid $rdColorAccent;
+    color: $rdColorExtraLight;
+  }
+}

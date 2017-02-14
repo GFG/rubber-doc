@@ -1,0 +1,35 @@
+.rd-content-block {
+  margin-top: $rdCollapseIndent;
+
+  &.first {
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0 0 $rdSpacingL 0;
+    padding: 0;
+    font-size: $rdFontSizeDefault;
+  }
+}
+
+.rd-content-block-head,
+h3.rd-content-block-head,
+.rd-content-block-head-sub,
+h4.rd-content-block-head-sub {
+  margin: 0 0 $rdSpacingXL 0;
+  padding: 0;
+
+  text-transform: uppercase;
+
+  font-size: $rdFontSizeMedium;
+  line-height: $rdDefaultLineHeight;
+  font-weight: normal;
+  color: $rdColorAccent;
+}
+
+.rd-content-block-head-sub,
+h4.rd-content-block-head-sub {
+  margin-top: $rdSpacingFreeLine;
+  margin-bottom: $rdSpacingL;
+  font-size: $rdFontSizeDefault;
+}

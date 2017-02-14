@@ -1,0 +1,14 @@
+body {
+  padding: 20px;
+  background-color: #FFFFFF;
+}
+
+h1 {
+  font-weight: normal;
+  color: #333333;
+}
+
+.browserupgrade {
+  text-align: center;
+  color: #FF0000;
+}

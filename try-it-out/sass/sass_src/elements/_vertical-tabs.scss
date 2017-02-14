@@ -1,0 +1,73 @@
+.rd-vertical-tabs {
+  .rd-vertical-tabs-header {
+    margin-top: $rdCollapseIndent;
+    margin-left: 10px;
+    margin-bottom: $rdCollapseIndent;
+    float: left;
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        padding: 0;
+        width: 56px;
+        margin-top: $rdSpacingS;
+
+        a {
+          display: block;
+          font-size: $rdFontSizeMedium;
+          line-height: $rdDefaultLineHeight;
+          padding: 17px 10px;
+          margin-right: 5px;
+          border-top: $rdVerticalTabsBorderStyle $rdColorMediumLight;
+          border-bottom: $rdVerticalTabsBorderStyle $rdColorMediumLight;
+          border-left: $rdVerticalTabsBorderStyleLeft $rdColorMediumLight;
+          background-color: $rdColorExtraLight;
+
+          text-decoration: none;
+          font-weight: bold;
+          color: $rdColorDark;
+        }
+      }
+
+      li.rd-active {
+        a {
+          border-top: $rdVerticalTabsBorderStyle $rdColorDark;
+          border-bottom: $rdVerticalTabsBorderStyle $rdColorDark;
+          border-left: $rdVerticalTabsBorderStyleLeft $rdColorDark;
+        }
+      }
+    }
+  }
+
+  .rd-vertical-tabs-contents {
+    min-height: $rdVerticalTabsContentsMinHeight;
+    padding: $rdCollapseIndent;
+    border: $rdVerticalTabsBorderStyle $rdColorMediumLight;
+    margin: $rdSpacingL $rdSpacingL $rdSpacingL 60px;
+  }
+
+  .rd-vertical-tabs-content {
+    display: none;
+
+    &.show {
+      display: block;
+    }
+  }
+}
+
+@each $name, $color in $rdColorResponseCodes {
+  .rd-vertical-tabs .rd-vertical-tabs-header ul li.rd-active a.rd-btn-#{$name} {
+    border-top: $rdVerticalTabsBorderStyle $color;
+    border-bottom: $rdVerticalTabsBorderStyle $color;
+    border-left: $rdVerticalTabsBorderStyleLeft $color;
+  }
+
+  a.rd-btn-#{$name},
+  .rd-vertical-tabs .rd-vertical-tabs-header ul li a.rd-btn-#{$name} {
+    color: $color;
+  }
+}
