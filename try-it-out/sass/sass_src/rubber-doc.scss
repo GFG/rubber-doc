@@ -1,0 +1,28 @@
+@import "variables";
+
+.rubber-doc {
+  color: $rdColorDark;
+  background-color: $rdColorExtraLight;
+  font-size: $rdFontSizeDefault;
+  line-height: $rdDefaultLineHeight;
+  font-weight: normal;
+
+  .hide {
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
+
+  @import "elements/section";
+  @import "elements/collapsible";
+  @import "elements/nested-tabs";
+  @import "elements/content-header";
+  @import "elements/content-block";
+  @import "elements/definition-term";
+  @import "elements/labels";
+  @import "elements/icons";
+  @import "elements/vertical-tabs";
+  @import "elements/code-example";
+}

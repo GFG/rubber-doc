@@ -1,0 +1,27 @@
+
+.rd-definition-term {
+  margin-bottom: $rdSpacingFreeLine;
+
+  h4 {
+    margin: 0 0 $rdSpacingL 0;
+    padding: 0 0 $rdSpacingS 0;
+    border-bottom: 1px solid $rdColorMediumLight;
+
+    font-size: $rdFontSizeDefault;
+    line-height: $rdDefaultLineHeight;
+    font-weight: bold;
+
+    .definition {
+      margin-left: $rdSpacingS;
+      color: $rdColorAccent;
+      font-style: italic;
+      font-weight: normal;
+    }
+  }
+
+  p {
+    padding: 0 0 0 $rdCollapseIndent;
+    margin: 0;
+    font-size: $rdFontSizeDefault;
+  }
+}

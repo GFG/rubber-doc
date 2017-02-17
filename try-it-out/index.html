@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>REST API Documentation</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/try-it-out.css">
+    <link rel="stylesheet" href="css/rubber-doc.css">
+
+</head>
+<body>
+<!--[if lt IE 9]>
+<p class="rd-browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div id="rubber-doc-container" class="rubber-doc">
+
+    <h1>REST API Documentation</h1>
+
+    <div class="rd-section">
+        <h2 class="rd-section-head">Getting Started</h2>
+        <ul id="getting-started" class="rd-collapsible-list">
+            <li class="rd-collapsible">
+                <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                    <span class="rd-icon-toggle"></span>
+                    Introduction
+                </a>
+                <div class="rd-collapsible-content" data-rd-collapsible="content">
+                    <div class="rd-collapsible-content-inner">Introduction content</div>
+                </div>
+            </li>
+            <li class="rd-collapsible">
+                <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                    <span class="rd-icon-toggle"></span>
+                    Authentication
+                </a>
+                <div class="rd-collapsible-content" data-rd-collapsible="content">
+                    <div class="rd-collapsible-content-inner">Authentication content</div>
+                </div>
+            </li>
+            <li class="rd-collapsible">
+                <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                    <span class="rd-icon-toggle"></span>
+                    Errors
+                </a>
+                <div class="rd-collapsible-content" data-rd-collapsible="content">
+                    <div class="rd-collapsible-content-inner">Errors content</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="rd-section">
+        <h2 class="rd-section-head">Resources</h2>
+        <ul id="resources" class="rd-collapsible-list">
+            <li class="rd-collapsible" data-rd-tabs="wrapper">
+                <div class="rd-collapsible-head">
+                    <!-- only <a> tag if the endpoint has sub resources //-->
+                    <a href="#" data-rd-resource="toggle-link">
+                        <span class="rd-icon-toggle"></span>
+                        /v1/products
+                    </a>
+                    <!-- START endpoints methods TABS //-->
+                    <ul class="rd-nested-tabs-nav">
+                        <li data-target="get" class="rd-nested-tabs-item rd-item-get"
+                            data-rd-tabs="head" data-rd-target="get" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">get</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                        <li data-target="patch" class="rd-nested-tabs-item rd-item-patch"
+                            data-rd-tabs="head" data-rd-target="patch" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">patch</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                    </ul>
+                    <!-- STOP endpoints methods TABS //-->
+                </div>
+                <div data-rd-tabs="contents" data-rd-collapsible="content" class="hide">
+                    <!-- START endpoints methods content //-->
+                    <div data-rd-identifier="get" class="rd-collapsible-content rd-method-get">
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Request</h3>
+                        </header>
+                        <div class="rd-collapsible-content-inner">
+                            <div class="rd-content-block first">
+                                <h3 class="rd-content-block-head">Description</h3>
+                                <p>get ...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-rd-identifier="patch" class="rd-collapsible-content rd-method-patch">
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Request</h3>
+                        </header>
+                        <div class="rd-collapsible-content-inner">
+                            <div class="rd-content-block first">
+                                <h3 class="rd-content-block-head">Description</h3>
+                                <p>patch ....</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- STOP endpoints methods content //-->
+
+                    <!-- START endpoints sub resources //-->
+                    <div class="rd-collapsible-content-alternative" data-rd-resource="children">
+                        <ul class="rd-collapsible-list">
+                            <li class="rd-collapsible" data-rd-tabs="wrapper">
+                                <div class="rd-collapsible-head">
+                                    <span class="rd-light">/v1/products/{uuid}</span>/items
+                                    <!-- START endpoints methods TABS //-->
+                                    <ul class="rd-nested-tabs-nav">
+                                        <li data-target="get" class="rd-nested-tabs-item rd-item-get"
+                                            data-rd-tabs="head" data-rd-target="get" data-rd-type="resource-tab">
+                                            <a href="#" class="rd-nested-tabs-item-inner">get</a>
+                                            <span class="rd-close">x</span>
+                                        </li>
+                                        <li data-target="patch" class="rd-nested-tabs-item rd-item-patch"
+                                            data-rd-tabs="head" data-rd-target="patch" data-rd-type="resource-tab">
+                                            <a href="#" class="rd-nested-tabs-item-inner">patch</a>
+                                            <span class="rd-close">x</span>
+                                        </li>
+                                    </ul>
+                                    <!-- STOP endpoints methods TABS //-->
+                                </div>
+                                <div data-rd-tabs="contents" data-rd-collapsible="content" class="hide">
+                                    <!-- START endpoints methods content //-->
+                                    <div data-rd-identifier="get" class="rd-collapsible-content rd-method-get">
+                                        <header class="rd-content-header">
+                                            <h3 class="rd-content-head">Request</h3>
+                                        </header>
+                                        <div class="rd-collapsible-content-inner">
+                                            <div class="rd-content-block first">
+                                                <h3 class="rd-content-block-head">Description</h3>
+                                                <p>get items ...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div data-rd-identifier="patch" class="rd-collapsible-content rd-method-patch">
+                                        <header class="rd-content-header">
+                                            <h3 class="rd-content-head">Request</h3>
+                                        </header>
+                                        <div class="rd-collapsible-content-inner">
+                                            <div class="rd-content-block first">
+                                                <h3 class="rd-content-block-head">Description</h3>
+                                                <p>patch items....</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- STOP endpoints methods content //-->
+                                </div>
+                            </li>
+                            <li class="rd-collapsible" data-rd-tabs="wrapper">
+                                <div class="rd-collapsible-head">
+                                    <span class="rd-light">/v1/products/{uuid}</span>/images
+                                    <!-- START endpoints methods TABS //-->
+                                    <ul class="rd-nested-tabs-nav">
+                                        <li data-target="get" class="rd-nested-tabs-item rd-item-get"
+                                            data-rd-tabs="head" data-rd-target="get" data-rd-type="resource-tab">
+                                            <a href="#" class="rd-nested-tabs-item-inner">get</a>
+                                            <span class="rd-close">x</span>
+                                        </li>
+                                        <li data-target="patch" class="rd-nested-tabs-item rd-item-patch"
+                                            data-rd-tabs="head" data-rd-target="patch" data-rd-type="resource-tab">
+                                            <a href="#" class="rd-nested-tabs-item-inner">patch</a>
+                                            <span class="rd-close">x</span>
+                                        </li>
+                                    </ul>
+                                    <!-- STOP endpoints methods TABS //-->
+                                </div>
+                                <div data-rd-tabs="contents" data-rd-collapsible="content" class="hide">
+                                    <!-- START endpoints methods content //-->
+                                    <div data-rd-identifier="get" class="rd-collapsible-content rd-method-get">
+                                        <header class="rd-content-header">
+                                            <h3 class="rd-content-head">Request</h3>
+                                        </header>
+                                        <div class="rd-collapsible-content-inner">
+                                            <div class="rd-content-block first">
+                                                <h3 class="rd-content-block-head">Description</h3>
+                                                <p>get images...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div data-rd-identifier="patch" class="rd-collapsible-content rd-method-patch">
+                                        <header class="rd-content-header">
+                                            <h3 class="rd-content-head">Request</h3>
+                                        </header>
+                                        <div class="rd-collapsible-content-inner">
+                                            <div class="rd-content-block first">
+                                                <h3 class="rd-content-block-head">Description</h3>
+                                                <p>patch images ....</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- STOP endpoints methods content //-->
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- STOP endpoints sub resources //-->
+                </div>
+            </li>
+            <li class="rd-collapsible" data-rd-tabs="wrapper">
+                <div class="rd-collapsible-head">
+                    <span class="rd-icon-toggle"></span>
+                    /v1/orders
+                    <ul class="rd-nested-tabs-nav">
+                        <li class="rd-nested-tabs-item rd-item-get"
+                            data-rd-tabs="head" data-rd-target="get" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">get</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                        <li class="rd-nested-tabs-item rd-item-post"
+                            data-rd-tabs="head" data-rd-target="post" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">post</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                        <li class="rd-nested-tabs-item rd-item-patch"
+                            data-rd-tabs="head" data-rd-target="patch" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">patch</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                    </ul>
+                </div>
+                <div data-rd-tabs="contents" data-rd-collapsible="content" class="hide">
+                    <div data-rd-identifier="get" class="rd-collapsible-content rd-method-get">
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Request</h3>
+                        </header>
+                        <div class="rd-collapsible-content-inner">GET!</div>
+                    </div>
+                    <div data-rd-identifier="post" class="rd-collapsible-content rd-method-post">
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Request</h3>
+                        </header>
+                        <div class="rd-collapsible-content-inner">
+                            <div class="rd-content-block first">
+                                <h3 class="rd-content-block-head">Description</h3>
+                                <p>Allows you to modify the properties of an account.</p>
+                            </div>
+
+                            <div class="rd-content-block">
+                                <h3 class="rd-content-block-head">URI Parameters</h3>
+                                <div class="rd-definition-term">
+                                    <h4>AccountSid <span class="definition">required, 34-34 characters string</span></h4>
+                                    <p>A 34 character string that uniquely identifies this account.</p>
+                                </div>
+                                <div class="rd-definition-term">
+                                    <h4>mediaTypeExtension <span class="definition">required, 34-34 characters string</span></h4>
+                                </div>
+                                <div class="rd-definition-term">
+                                    <h4>version <span class="definition">required, (2010-04-01) string</span></h4>
+                                    <p>A 34 character string that uniquely identifies this account.</p>
+                                </div>
+                            </div>
+
+                            <div class="rd-content-block">
+                                <h3 class="rd-content-block-head">Security schemes</h3>
+                                <p><span class="rd-info-label">Oauth</span></p>
+
+                                <h4 class="rd-content-block-head-sub">Scope</h4>
+                                <p><span class="rd-info-label">finance_read</span></p>
+
+                                <h4 class="rd-content-block-head-sub">Headers</h4>
+                                <div class="rd-definition-term">
+                                    <h4>Authorization <span class="definition">string</span></h4>
+                                    <p>Authorization description.</p>
+                                </div>
+                            </div>
+
+                            <div class="rd-content-block">
+                                <h3 class="rd-content-block-head">Body</h3>
+                                <p><span class="rd-info-label">application/x-www-form-urlencoded</span></p>
+
+                                <div class="rd-definition-term">
+                                    <h4>param1 <span class="definition">required, 34-34 characters string</span></h4>
+                                    <p>A 34 character string that uniquely identifies this account.</p>
+                                </div>
+                                <div class="rd-definition-term">
+                                    <h4>param2 <span class="definition">required, 34-34 characters string</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Response</h3>
+                        </header>
+                        <div class="rd-vertical-tabs" data-rd-tabs="wrapper">
+                            <div class="rd-vertical-tabs-header">
+                               <ul>
+                                   <li class="rd-active" data-rd-tabs="head" data-rd-target="200"><a href="#" class="rd-btn-2xx">200</a></li>
+                                   <li data-rd-tabs="head" data-rd-target="201"><a href="#" class="rd-btn-2xx">201</a></li>
+                                   <li data-rd-tabs="head" data-rd-target="300"><a href="#" class="rd-btn-3xx">300</a></li>
+                                   <li data-rd-tabs="head" data-rd-target="400"><a href="#" class="rd-btn-4xx">400</a></li>
+                                   <li data-rd-tabs="head" data-rd-target="401"><a href="#" class="rd-btn-4xx">401</a></li>
+                                   <li data-rd-tabs="head" data-rd-target="500"><a href="#" class="rd-btn-5xx">500</a></li>
+                               </ul>
+                            </div>
+                            <div class="rd-vertical-tabs-contents" data-rd-tabs="contents">
+                                <div data-rd-identifier="200" class="rd-vertical-tabs-content show">
+                                    <div class="rd-content-block first">
+                                        <h3 class="rd-content-block-head">Status 200</h3>
+                                        <p>The request was successful, we updated the resource and the response
+                                            body contains the representation.</p>
+
+                                        <div data-rd-multi-selection="wrapper">
+                                            <h4 class="rd-content-block-head-sub">Body</h4>
+                                            <p data-rd-multi-selection="items-group" data-rd-selected="json">
+                                                <a href="#" data-rd-multi-selection="item" data-rd-value="json"
+                                                   class="rd-info-label rd-active">application/json</a>
+                                                <a href="#" data-rd-multi-selection="item" data-rd-value="xml"
+                                                   class="rd-info-label">application/xml</a>
+                                            </p>
+
+                                            <h4 class="rd-content-block-head-sub">Examples</h4>
+                                            <p data-rd-multi-selection="items-group" data-rd-selected="example1">
+                                                <a href="#" data-rd-multi-selection="item" data-rd-value="example1"
+                                                   class="rd-info-label rd-active">Example1</a>
+                                                <a href="#" data-rd-multi-selection="item" data-rd-value="example2"
+                                                   class="rd-info-label">Example2</a>
+                                            </p>
+                                            <div class="rd-code-example" data-rd-multi-selection="contents">
+                                                <div class="rd-code-example-item show" data-rd-identifier="multi-selection__json__example1">
+                                                    {
+                                                    "foo": "bar"
+                                                    }
+                                                </div>
+                                                <div class="rd-code-example-item" data-rd-identifier="multi-selection__xml__example1">
+                                                    xml example 1
+                                                </div>
+                                                <div class="rd-code-example-item" data-rd-identifier="multi-selection__json__example2">
+                                                    json example 2
+                                                </div>
+                                                <div class="rd-code-example-item" data-rd-identifier="multi-selection__xml__example2">
+                                                    xml example 2
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-rd-identifier="201" class="rd-vertical-tabs-content">201</div>
+                                <div data-rd-identifier="300" class="rd-vertical-tabs-content">300</div>
+                                <div data-rd-identifier="400" class="rd-vertical-tabs-content">400</div>
+                                <div data-rd-identifier="401" class="rd-vertical-tabs-content">401</div>
+                                <div data-rd-identifier="500" class="rd-vertical-tabs-content">500</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-rd-identifier="patch" class="rd-collapsible-content rd-method-patch">
+                        <header class="rd-content-header">
+                            <h3 class="rd-content-head">Request</h3>
+                        </header>
+                        <div class="rd-collapsible-content-inner">PATCH</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+</div>
+<script src="js/vendor/jquery-1.11.2.min.js"></script>
+<script src="js/rubber-doc.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        rubberDoc.init($('#rubber-doc-container'));
+    });
+</script>
+
+</body>
+</html>

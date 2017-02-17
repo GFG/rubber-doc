@@ -1,0 +1,60 @@
+ul.rd-collapsible-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rd-collapsible {
+  margin: 0;
+  padding: 0;
+
+  .rd-collapsible-head {
+    position: relative;
+    display: block;
+    border-bottom: 1px solid $rdColorMediumLight;
+    color: $rdColorDark;
+    font-size: $rdFontSizeLarge;
+    font-weight: normal;
+    text-decoration: none;
+    line-height: $rdDefaultLineHeight;
+    padding: $rdCollapsibleHeadPaddingVertical 0 $rdCollapsibleHeadPaddingVertical $rdCollapseIndent;
+
+    > a {
+      text-decoration: none;
+      color: $rdColorDark;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .rd-light {
+      color: $rdColorLightText;
+    }
+  }
+
+  &.rd-active > .rd-collapsible-head {
+    padding-top: $rdCollapsibleHeadPaddingVertical/2;
+    border-top: $rdCollapsibleHeadPaddingVertical/2 solid $rdColorExtraLight;
+    background: $rdColorMedium;
+  }
+
+  &.rd-active > .rd-collapsible-head.rd-child-opened {
+    background: transparent;
+  }
+
+  .rd-collapsible-content {
+    display: none;
+    border-left: 1px solid $rdColorMediumLight;
+    border-right: 1px solid $rdColorMediumLight;
+    border-bottom: 1px solid $rdColorMediumLight;
+  }
+
+  .rd-collapsible-content-alternative {
+    display: none;
+  }
+
+  .rd-collapsible-content-inner {
+    padding: $rdCollapseIndent;
+  }
+}

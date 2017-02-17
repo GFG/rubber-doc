@@ -1,0 +1,21 @@
+.rd-content-header {
+  position: relative;
+  padding: $rdSpacingM 0;
+}
+
+.rd-content-head,
+h3.rd-content-head {
+  font-weight: normal;
+  font-size: $rdContentHeadFontSize;
+  line-height: $rdDefaultLineHeight;
+  color: $rdColorExtraLight;
+  margin: 0 0 0 $rdCollapseIndent;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+@each $name, $color in $rdColorHttpVerbs {
+  .rd-method-#{$name} .rd-content-header {
+    background-color: $color;
+  }
+}

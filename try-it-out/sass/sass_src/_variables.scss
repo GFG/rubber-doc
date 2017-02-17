@@ -1,0 +1,64 @@
+$rdColorExtraLight:     #FFFFFF;
+$rdColorDark:           #333333;
+$rdColorMediumLight:    #CCCCCC;
+$rdColorMedium:         #E0E0E0;
+$rdColorAccent:         #4c5272;
+$rdColorLight:          #F5F5F5;
+$rdColorLightText:      #b9b9b9;
+
+// colors for the HTTP verb tabs
+$rdColorHttpVerbs: (
+    'get':      #0B88B9,
+    'put':      #87538f,
+    'delete':   #d14956,
+    'post':     #1EA18D,
+    'patch':    #02B0E2,
+    'connect':  #E48F0A,
+    'head':     #8A45A2,
+    'options':  #1EBD77,
+    'trace':    #98B805
+);
+
+// colors for HTTP response codes
+$rdColorResponseCodes: (
+    '2xx':    green,
+    '3xx':    #ff0,
+    '4xx':    coral,
+    '5xx':    red
+);
+
+// font sizes
+$rdFontSizeDefault: 14px;
+$rdDefaultLineHeight: 1.2;
+
+$rdFontSizeLarge: 18px;
+$rdFontSizeMedium: 16px;
+
+// spacings
+$rdSpacingXS: 2px;
+$rdSpacingS: 4px;
+$rdSpacingM: 6px;
+$rdSpacingL: 8px;
+$rdSpacingXL: 10px;
+
+$rdSpacingFreeLine: 16px;
+
+$rdCollapseIndent: 32px;
+
+// rd-section
+$rdSectionHeadFontSize: 20px;
+$rdSectionVerticalSpace: 35px;
+
+// rd-content-head
+$rdContentHeadFontSize: 15px;
+
+// rd-collapsible
+$rdCollapsibleHeadPaddingVertical: 12px;
+
+// rd-labels
+$rdLabelsBorderRadius: 5px;
+
+// rd-vertical-tabs
+$rdVerticalTabsBorderStyle: 1px solid;
+$rdVerticalTabsBorderStyleLeft: 3px solid;
+$rdVerticalTabsContentsMinHeight: 500px;
