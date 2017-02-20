@@ -9,13 +9,8 @@
   padding: 0;
   border: 0;
   background: none;
-  opacity: .25;
   transition: .2s ease transform, .2s ease opacity;
   transform: rotate(-90deg);
-
-  &:hover {
-    opacity: 1
-  }
 
   &:focus {
     outline: 0;
@@ -28,9 +23,9 @@
     left: 50%;
     width: 0;
     height: 0;
-    margin-top: -3.5px;
-    margin-left: -7px;
-    border: 7px solid transparent;
+    margin-top: -2.5px;
+    margin-left: -5px;
+    border: 5px solid transparent;
     border-top-color: $rdColorDark;
   }
 }
