@@ -1,0 +1,16 @@
+displayName: "2 - Example"
+/example:
+  is: [useTraits.secured]
+  securedBy: [ useSchemes.oauth_1_0 ]
+  get:
+    description: Request Example
+    queryParameters:
+      example:
+        description: Query Parameter Example
+        type: date-only
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: useTypes.Example

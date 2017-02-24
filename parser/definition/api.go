@@ -11,14 +11,33 @@ type Api struct {
 	BaseURIParameters []Parameter
 	Protocols         []Protocol
 	MediaTypes        []MediaType
-	Types             []Type
+	CustomTypes       []CustomType
+	Traits            []Trait
 	SecuritySchemes   []SecurityScheme
-	SecuredBy         map[string]interface{}
+	SecuredBy         []Option
 	ResourceGroups    []ResourceGroup
 }
 
-// Type represents custom types
-type Type interface{}
+// CustomType represents custom types
+type CustomType struct {
+	Name        string
+	Description string
+	Type        interface{}
+	Default     interface{}
+	Enum        interface{}
+	Properties  map[string]interface{}
+	Examples    map[string]interface{}
+}
+
+// Trait Optional definition that
+type Trait struct {
+	Name         string
+	Usage        string
+	Description  string
+	Protocols    []Protocol
+	Href         Href
+	Transactions []Transaction
+}
 
 // Transaction groups a pair request/response
 type Transaction struct {
@@ -31,7 +50,7 @@ type Request struct {
 	Title       string
 	Description string
 	Method      string
-	Body        Body
+	Body        []Body
 	Headers     []Header
 	ContentType string
 }
@@ -41,15 +60,21 @@ type Response struct {
 	StatusCode  int
 	Description string
 	Headers     []Header
-	Body        Body
+	Body        []Body
 }
 
 // Parameter
 type Parameter struct {
-	Required    bool
-	Description string
 	Name        string
-	Type        Type
+	Description string
+	Type        string
+	Required    bool
+	Pattern     *string
+	MinLength   *int
+	MaxLength   *int
+	Min         *float64
+	Max         *float64
+	Example     interface{}
 }
 
 // Href
@@ -60,12 +85,22 @@ type Href struct {
 
 // Header
 type Header struct {
-	Key   string
-	Value string
+	Name        string
+	Description string
+	Example     interface{}
 }
 
 // Body
 type Body struct {
-	ContentType string
-	Content     string
+	Description string
+	Type        string
+	CustomType  CustomType
+	MediaType   MediaType
+	Example     string
+}
+
+// Option
+type Option struct {
+	Name       string
+	Parameters map[string]interface{}
 }

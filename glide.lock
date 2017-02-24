@@ -1,21 +1,36 @@
-hash: e7b503a7e348174bdf056274964d1e853097c0ee0cb2ffd4b128b875cbeef306
-updated: 2017-01-23T15:32:18.383428848+01:00
+hash: b6c6ebd24f3a872f6b993db0e995dcf6a90069e25607dad47150087bfbb61a1a
+updated: 2017-02-23T17:58:06.704276911+01:00
 imports:
-- name: github.com/buddhamagnet/yaml
-  version: 8e72a68a3483a9d044e4c6f49cc695b5ee60c671
+- name: bitbucket.org/pkg/inflect
+  version: 8961c3750a47b8c0b3e118d52513b97adf85a7e8
+- name: github.com/chuckpreslar/inflect
+  version: 423e3ac59c611e2d549527ab8c15fb99335d30ba
+  subpackages:
+  - languages
+  - types
+- name: github.com/gigforks/yaml
+  version: 3396035bfe07c24995d93599a57cf12f9d1c58e4
 - name: github.com/Jumpscale/go-raml
-  version: 59a4bff6b7aa034e34e56fe0adfc29ec1ec9dcb5
+  version: f3d8cbae2a1e8339fd641bdb48515c822541b782
+  repo: git@github.com:fstaoe/go-raml
+  vcs: git
   subpackages:
   - raml
+- name: github.com/kr/pretty
+  version: e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
+- name: github.com/kr/text
+  version: bb797dc4fb8320488f47bf11de07a733d7233e1f
 - name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
+  version: c078b1e43f58d563c74cebe63c85789e76ddb627
 - name: github.com/urfave/cli
   version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: golang.org/x/sys
-  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  version: e24f485414aeafb646f6fca458b0bf869c0880a1
   subpackages:
   - unix
 testImports:
+- name: github.com/bradfitz/slice
+  version: d9036e2120b5ddfa53f3ebccd618c4af275f47da
 - name: github.com/davecgh/go-spew
   version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
   subpackages:
@@ -25,6 +40,10 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 2402e8e7a02fc811447d11f881aa9746cdc57983
+  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
   subpackages:
   - assert
+- name: go4.org
+  version: 7ce08ca145dbe0e66a127c447b80ee7914f3e4f9
+  subpackages:
+  - reflectutil

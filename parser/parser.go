@@ -5,7 +5,7 @@ import (
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 )
 
-// Parser
+//Parser Interface definition
 type Parser interface {
 	Parse(filename string, tra transformer.Transformer) (def *definition.Api, err error)
 }

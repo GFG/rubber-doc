@@ -1,14 +1,20 @@
 package: github.com/rocket-internet-berlin/RocketLabsRubberDoc
 import:
 - package: github.com/Sirupsen/logrus
-  version: ^0.11.0
+  version: ^0.11.2
 - package: github.com/urfave/cli
   version: ^1.19.1
 - package: github.com/Jumpscale/go-raml
-  version: ^0.1.0
+  version: f3d8cbae2a1e8339fd641bdb48515c822541b782
   subpackages:
   - raml
+  repo:    git@github.com:fstaoe/go-raml
+  vcs:     git
 testImport:
+- package: go4.org
+  subpackages:
+  - reflectutil
+- package: github.com/bradfitz/slice
 - package: github.com/stretchr/testify
   subpackages:
   - assert

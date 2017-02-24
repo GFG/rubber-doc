@@ -1,0 +1,60 @@
+#%RAML 1.0
+title: Custom API Title
+
+version: 1.0
+
+protocols: [ HTTPS ]
+
+mediaType: application/json
+
+baseUri: "//{apiEntryPoint}/rest"
+
+baseUriParameters:
+  apiEntryPoint:
+    description: The URL used to consume API
+    type: string
+    required: true
+
+types:
+  Custom:
+    description: "A custom type"
+    type: string
+
+uses:
+  useSecuritySchemes: libraries/securitySchemes/example.raml
+  useTypes: libraries/types/example.raml
+  useTraits: libraries/traits/example.raml
+
+securitySchemes:
+  oauth_2_0:
+    type: OAuth 2.0
+    description: |
+      Custom API supports OAuth 2.0 for authenticating all requests.
+    describedBy:
+      headers:
+        Authorization:
+          type: string
+          description: Used to send a valid OAuth 2 access token.
+      queryParameters:
+        access_token:
+          type: string
+          description: Used to send a valid OAuth 2 access token.
+      responses:
+        401:
+          description: Bad or expired token.
+    settings:
+      scopes: [ users.read ]
+      authorizationGrants: [ 'urn:ietf:params:oauth:grant-type:saml2-bearer' ]
+      authorizationUri: https://example.net/oauth/authorize
+      accessTokenUri: https://example.net/oauth/access-token
+
+securedBy: [ oauth_2_0: { scopes: [ ] } ]
+
+/v1:
+  displayName: "1 - Example"
+  /first: !include resources/first.raml
+  /second: !include resources/second.raml
+
+/v2:
+  displayName: "2 - Example"
+  /first: !include resources/first.raml
