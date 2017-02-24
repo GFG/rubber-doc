@@ -17,12 +17,12 @@
 .rubber-doc h2.rd-section-head {
   color: #333333;
   font-size: 20px;
-  font-weight: normal;
   line-height: 1.2;
-  padding: 0;
   margin: 0 0 6px 0;
-  text-transform: uppercase;
-  border-bottom: 1px solid #333333;
+  padding: 4px;
+  -webkit-box-shadow: 0 4px 2px -2px #CCCCCC;
+  box-shadow: 0 4px 2px -2px #CCCCCC;
+  font-weight: bold;
 }
 .rubber-doc ul.rd-collapsible-list {
   list-style-type: none;
@@ -42,7 +42,7 @@
   font-weight: normal;
   text-decoration: none;
   line-height: 1.2;
-  padding: 12px 0 12px 32px;
+  padding: 12px 0 12px 24px;
 }
 .rubber-doc .rd-collapsible .rd-collapsible-head > a {
   text-decoration: none;
@@ -72,7 +72,7 @@
   display: none;
 }
 .rubber-doc .rd-collapsible .rd-collapsible-content-inner {
-  padding: 32px;
+  padding: 24px;
 }
 .rubber-doc .rd-nested-tabs-item {
   overflow: hidden;
@@ -213,7 +213,7 @@
   font-size: 15px;
   line-height: 1.2;
   color: #FFFFFF;
-  margin: 0 0 0 32px;
+  margin: 0 0 0 24px;
   padding: 0;
   text-transform: uppercase;
 }
@@ -245,7 +245,7 @@
   background-color: #98B805;
 }
 .rubber-doc .rd-content-block {
-  margin-top: 32px;
+  margin-top: 24px;
 }
 .rubber-doc .rd-content-block.first {
   margin-top: 0;
@@ -291,7 +291,7 @@
   font-weight: normal;
 }
 .rubber-doc .rd-definition-term p {
-  padding: 0 0 0 32px;
+  padding: 0 0 0 24px;
   margin: 0;
   font-size: 14px;
 }
@@ -331,12 +331,8 @@
   padding: 0;
   border: 0;
   background: none;
-  opacity: .25;
   transition: .2s ease transform, .2s ease opacity;
   transform: rotate(-90deg);
-}
-.rubber-doc .rd-icon-toggle:hover {
-  opacity: 1;
 }
 .rubber-doc .rd-icon-toggle:focus {
   outline: 0;
@@ -348,18 +344,18 @@
   left: 50%;
   width: 0;
   height: 0;
-  margin-top: -3.5px;
-  margin-left: -7px;
-  border: 7px solid transparent;
+  margin-top: -2.5px;
+  margin-left: -5px;
+  border: 5px solid transparent;
   border-top-color: #333333;
 }
 .rubber-doc .rd-active .rd-icon-toggle {
   transform: rotate(0deg);
 }
 .rubber-doc .rd-vertical-tabs .rd-vertical-tabs-header {
-  margin-top: 32px;
+  margin-top: 24px;
   margin-left: 10px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   float: left;
 }
 .rubber-doc .rd-vertical-tabs .rd-vertical-tabs-header ul {
@@ -394,7 +390,7 @@
 }
 .rubber-doc .rd-vertical-tabs .rd-vertical-tabs-contents {
   min-height: 500px;
-  padding: 32px;
+  padding: 24px;
   border: 1px solid #CCCCCC;
   margin: 8px 8px 8px 60px;
 }

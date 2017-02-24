@@ -5,10 +5,10 @@
 h2.rd-section-head {
   color: $rdColorDark;
   font-size: $rdSectionHeadFontSize;
-  font-weight: normal;
   line-height: $rdDefaultLineHeight;
-  padding: 0;
   margin: 0 0 $rdSpacingM 0;
-  text-transform: uppercase;
-  border-bottom: 1px solid $rdColorDark;
+  padding: $rdSpacingS;
+  -webkit-box-shadow: 0 4px 2px -2px $rdColorMediumLight;
+  box-shadow: 0 4px 2px -2px $rdColorMediumLight;
+  font-weight: bold;
 }

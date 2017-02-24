@@ -1,64 +1,79 @@
-$rdColorExtraLight:     #FFFFFF;
-$rdColorDark:           #333333;
-$rdColorMediumLight:    #CCCCCC;
-$rdColorMedium:         #E0E0E0;
-$rdColorAccent:         #4c5272;
-$rdColorLight:          #F5F5F5;
-$rdColorLightText:      #b9b9b9;
+$rdColorExtraLight:     #FFFFFF !default;
+$rdColorDark:           #333333 !default;
+$rdColorMediumLight:    #CCCCCC !default;
+$rdColorMedium:         #E0E0E0 !default;
+$rdColorAccent:         #4c5272 !default;
+$rdColorLight:          #F5F5F5 !default;
+$rdColorLightText:      #b9b9b9 !default;
 
 // colors for the HTTP verb tabs
+$rdColorHttpGet:      #0B88B9 !default;
+$rdColorHttpPut:      #87538f !default;
+$rdColorHttpDelete:   #d14956 !default;
+$rdColorHttpPost:     #1EA18D !default;
+$rdColorHttpPatch:    #02B0E2 !default;
+$rdColorHttpConnect:  #E48F0A !default;
+$rdColorHttpHead:     #8A45A2 !default;
+$rdColorHttpOptions:  #1EBD77 !default;
+$rdColorHttpTrace:    #98B805 !default;
+
 $rdColorHttpVerbs: (
-    'get':      #0B88B9,
-    'put':      #87538f,
-    'delete':   #d14956,
-    'post':     #1EA18D,
-    'patch':    #02B0E2,
-    'connect':  #E48F0A,
-    'head':     #8A45A2,
-    'options':  #1EBD77,
-    'trace':    #98B805
+        'get':      $rdColorHttpGet,
+        'put':      $rdColorHttpPut,
+        'delete':   $rdColorHttpDelete,
+        'post':     $rdColorHttpPost,
+        'patch':    $rdColorHttpPatch,
+        'connect':  $rdColorHttpConnect,
+        'head':     $rdColorHttpHead,
+        'options':  $rdColorHttpOptions,
+        'trace':    $rdColorHttpTrace
 );
 
 // colors for HTTP response codes
+$rdColorResponse2xx: green !default;
+$rdColorResponse3xx: #ff0 !default;
+$rdColorResponse4xx: coral !default;
+$rdColorResponse5xx: red !default;
+
 $rdColorResponseCodes: (
-    '2xx':    green,
-    '3xx':    #ff0,
-    '4xx':    coral,
-    '5xx':    red
+        '2xx':    $rdColorResponse2xx,
+        '3xx':    $rdColorResponse3xx,
+        '4xx':    $rdColorResponse4xx,
+        '5xx':    $rdColorResponse5xx
 );
 
 // font sizes
-$rdFontSizeDefault: 14px;
-$rdDefaultLineHeight: 1.2;
+$rdFontSizeDefault: 14px !default;
+$rdDefaultLineHeight: 1.2 !default;
 
-$rdFontSizeLarge: 18px;
-$rdFontSizeMedium: 16px;
+$rdFontSizeLarge: 18px !default;
+$rdFontSizeMedium: 16px !default;
 
 // spacings
-$rdSpacingXS: 2px;
-$rdSpacingS: 4px;
-$rdSpacingM: 6px;
-$rdSpacingL: 8px;
-$rdSpacingXL: 10px;
+$rdSpacingXS: 2px !default;
+$rdSpacingS: 4px !default;
+$rdSpacingM: 6px !default;
+$rdSpacingL: 8px !default;
+$rdSpacingXL: 10px !default;
 
-$rdSpacingFreeLine: 16px;
+$rdSpacingFreeLine: 16px !default;
 
-$rdCollapseIndent: 32px;
+$rdCollapseIndent: 24px !default;
 
 // rd-section
-$rdSectionHeadFontSize: 20px;
-$rdSectionVerticalSpace: 35px;
+$rdSectionHeadFontSize: 20px !default;
+$rdSectionVerticalSpace: 35px !default;
 
 // rd-content-head
-$rdContentHeadFontSize: 15px;
+$rdContentHeadFontSize: 15px !default;
 
 // rd-collapsible
-$rdCollapsibleHeadPaddingVertical: 12px;
+$rdCollapsibleHeadPaddingVertical: 12px !default;
 
 // rd-labels
-$rdLabelsBorderRadius: 5px;
+$rdLabelsBorderRadius: 5px !default;
 
 // rd-vertical-tabs
-$rdVerticalTabsBorderStyle: 1px solid;
-$rdVerticalTabsBorderStyleLeft: 3px solid;
-$rdVerticalTabsContentsMinHeight: 500px;
+$rdVerticalTabsBorderStyle: 1px solid !default;
+$rdVerticalTabsBorderStyleLeft: 3px solid !default;
+$rdVerticalTabsContentsMinHeight: 500px !default;
