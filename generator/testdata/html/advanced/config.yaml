@@ -1,0 +1,17 @@
+combined: true
+srcDir: "testdata/html/advanced"
+dstDir: "/tmp/rubberdoc/output/html/advanced"
+output: "index.html"
+templates:
+  -
+    src: "base.tmpl"
+  -
+    src: "title.tmpl"
+  -
+    src: "version.tmpl"
+  -
+    src: "baseUri.tmpl"
+  -
+    src: "protocols.tmpl"
+  -
+    src: "mediaTypes.tmpl"
