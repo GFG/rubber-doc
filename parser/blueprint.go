@@ -17,7 +17,7 @@ import (
 	"io/ioutil"
 	"unsafe"
 
-	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/walker"
 )

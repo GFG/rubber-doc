@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{.Title}}</title>
+    </head>
+    <body>
+        <h1>{{.Title}}</h1>
+        <p>
+            <span>Version: {{.Version}}</span>
+        </p>
+        <p>
+            <span>Url: {{.BaseURI}}</span>
+        </p>
+        <p>
+            <span>Protocols:{{range .Protocols}} {{.}}{{end}}</span>
+        </p>
+        <p>
+            <span>Media Types:{{range .MediaTypes}} {{.}}{{end}}</span>
+        </p>
+    </body>
+</html>

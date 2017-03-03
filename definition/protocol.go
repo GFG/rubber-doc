@@ -1,8 +1,8 @@
 package definition
 
 import (
-	"strings"
 	"errors"
+	"strings"
 )
 
 const (
@@ -19,13 +19,15 @@ func (p Protocol) isValid() bool {
 	return lower == HTTP_PROTOCOL || lower == HTTPS_PROTOCOL
 }
 
-func NewProtocolFromURL(URL string) (Protocol, error) {
+// NewProtocolFromURL Returns the protocol based on the URL
+func NewProtocolFromURL(URL string) (proto Protocol, err error) {
 	s := strings.Split(URL, ":")
-	prot := Protocol(s[0])
 
-	if !prot.isValid() {
-		return nil, errors.New("Invalid Protocol")
+	proto = Protocol(s[0])
+
+	if !proto.isValid() {
+		err = errors.New("Invalid Protocol")
+		return
 	}
-
-	return prot, nil
+	return
 }

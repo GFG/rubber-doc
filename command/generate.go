@@ -1,10 +1,12 @@
 package command
 
 import (
-	"errors"
-	"fmt"
 	"path/filepath"
 
+	"github.com/pkg/errors"
+
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/generator"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 )
@@ -14,19 +16,21 @@ const (
 	RAML      = ".raml"
 )
 
+// GenerateCommand Represents the struct of the generate command
 type GenerateCommand struct {
-	OutputFormat string
-	Src          string
-	OutputDir    string
+	SpecFile   string
+	ConfigFile string
 }
 
-func (c *GenerateCommand) Execute() error {
+// Execute
+func (c *GenerateCommand) Execute() (err error) {
 	var (
 		p parser.Parser
 		f transformer.Transformer
 	)
 
-	switch filepath.Ext(c.Src) {
+	format := filepath.Ext(c.SpecFile)
+	switch format {
 	case BLUEPRINT:
 		p = parser.NewBlueprintParser()
 		f = transformer.NewBlueprintTransformer()
@@ -34,13 +38,21 @@ func (c *GenerateCommand) Execute() error {
 		p = parser.NewRamlParser()
 		f = transformer.NewRamlTransformer()
 	default:
-		return errors.New("unsupported format")
+		err = errors.Wrapf(err, "The format found %s for the specification given is unsuported", format)
+		return
 	}
 
-	def, err := p.Parse(c.Src, f)
-	if def != nil {
-		fmt.Printf("%+v\n", def)
+	var def *definition.Api
+	if def, err = p.Parse(c.SpecFile, f); err != nil {
+		return
 	}
 
-	return err
+	var gen *generator.Generator
+	if gen, err = generator.NewGenerator(c.ConfigFile, *def); err != nil {
+		return
+	}
+
+	err = gen.Generate()
+
+	return
 }

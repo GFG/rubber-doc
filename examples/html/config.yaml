@@ -1,0 +1,7 @@
+combined: false
+srcDir: "examples/html"
+dstDir: "output/html"
+templates:
+  -
+    src: "simple.tmpl"
+    dst: "simple.html"

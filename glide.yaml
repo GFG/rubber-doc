@@ -5,11 +5,11 @@ import:
 - package: github.com/urfave/cli
   version: ^1.19.1
 - package: github.com/Jumpscale/go-raml
-  version: f3d8cbae2a1e8339fd641bdb48515c822541b782
+  version: e0ddd7c7d63fb8d9793babf308fe7b99544a1794
   subpackages:
   - raml
-  repo:    git@github.com:fstaoe/go-raml
-  vcs:     git
+- package: github.com/pkg/errors
+  version: ^0.8.0
 testImport:
 - package: go4.org
   subpackages:

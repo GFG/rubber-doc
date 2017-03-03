@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/bradfitz/slice"
-	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/stretchr/testify/assert"
 )
@@ -93,7 +93,7 @@ func assertCustomTypes(t *testing.T) {
 			Examples:    nil,
 		},
 		{
-			Name:        "useTypes.Example",
+			Name:        "Example",
 			Description: "An example type loaded as Library",
 			Type:        "array",
 			Default:     nil,
@@ -109,7 +109,7 @@ func assertTraits(t *testing.T) {
 
 	expectedTraits := []definition.Trait{
 		{
-			Name:  "useTraits.secured",
+			Name:  "secured",
 			Usage: "Apply to methods needing security - do not forget to also add securedBy!",
 			Transactions: []definition.Transaction{
 				{
@@ -138,6 +138,26 @@ func assertSecuritySchemes(t *testing.T) {
 	t.Parallel()
 
 	expectedSecuritySchemes := []definition.SecurityScheme{
+		{
+			Name:         "OAuth 1.0",
+			Description:  "OAuth 1.0 loaded as Library",
+			Type:         "OAuth 1.0",
+			Transactions: nil,
+			Settings: []definition.SecuritySchemeSetting{
+				{
+					Name: "authorizationUri",
+					Data: "https://example.com/oauth/authorize",
+				},
+				{
+					Name: "requestTokenUri",
+					Data: "https://api.example.com/oauth/request_token",
+				},
+				{
+					Name: "tokenCredentialsUri",
+					Data: "https://api.example.com/oauth/access_token",
+				},
+			},
+		},
 		{
 			Name:        "oauth_2_0",
 			Description: "Custom API supports OAuth 2.0 for authenticating all requests.\n",
@@ -185,26 +205,6 @@ func assertSecuritySchemes(t *testing.T) {
 					Data: []interface{}{
 						"users.read",
 					},
-				},
-			},
-		},
-		{
-			Name:         "useSecuritySchemes.oauth_1_0",
-			Description:  "OAuth 1.0 loaded as Library",
-			Type:         "OAuth 1.0",
-			Transactions: nil,
-			Settings: []definition.SecuritySchemeSetting{
-				{
-					Name: "authorizationUri",
-					Data: "https://example.com/oauth/authorize",
-				},
-				{
-					Name: "requestTokenUri",
-					Data: "https://api.example.com/oauth/request_token",
-				},
-				{
-					Name: "tokenCredentialsUri",
-					Data: "https://api.example.com/oauth/access_token",
 				},
 			},
 		},

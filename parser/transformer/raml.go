@@ -4,7 +4,8 @@ import (
 	"strconv"
 
 	"github.com/Jumpscale/go-raml/raml"
-	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/pkg/errors"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 )
 
 type RamlTransformer struct{}
@@ -32,6 +33,7 @@ func (tra *RamlTransformer) Transform(data interface{}) (def *definition.Api) {
 	tra.securedBy(ramlDef, def)
 	tra.resourceGroups(ramlDef, def)
 	tra.traits(ramlDef.Traits, def)
+	tra.libraries(ramlDef.Libraries, def)
 
 	return
 }
@@ -95,6 +97,21 @@ func (tra *RamlTransformer) resourceGroups(ramlDef raml.APIDefinition, def *defi
 // traits Transforms raml's securitySchemes definition in api's traits definition
 func (tra *RamlTransformer) traits(ramlTraits map[string]raml.Trait, def *definition.Api) {
 	def.Traits = tra.handleTraits(ramlTraits)
+}
+
+// libraries Joins some combined (Types and SecuritySchemes) declarations in libraries with the root api definition
+func (tra *RamlTransformer) libraries(ramlLibs map[string]*raml.Library, def *definition.Api) {
+	for _, ramlLib := range ramlLibs {
+		def.CustomTypes = append(def.CustomTypes, tra.handleTypes(ramlLib.Types)...)
+		def.SecuritySchemes = append(def.SecuritySchemes, tra.handleSecuritySchemes(ramlLib.SecuritySchemes)...)
+		def.Traits = append(def.Traits, tra.handleTraits(ramlLib.Traits)...)
+
+		if ramlLib.Libraries != nil {
+			tra.libraries(ramlLib.Libraries, def)
+		}
+	}
+
+	return
 }
 
 // handleProtocols Generic method which handles raml's protocol definition.
@@ -171,16 +188,28 @@ func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.H
 // handleTypes Generic method which handles raml's type definition.
 func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customTypes []definition.CustomType) {
 	for name, ramlType := range ramlTypes {
-		customType := definition.CustomType{
+		customType := &definition.CustomType{
 			Name:        name,
 			Description: ramlType.Description,
 			Type:        ramlType.Type,
 			Enum:        ramlType.Enum,
 			Default:     ramlType.Default,
-			Examples:    ramlType.Examples,
 		}
 
-		customTypes = append(customTypes, customType)
+		for _, example := range ramlType.Examples {
+			customType.Examples = append(customType.Examples, example)
+		}
+
+		if ramlType.Example != nil {
+			customType.Examples = append(customType.Examples, ramlType.Example)
+		}
+
+		// It takes the parameter name over the parameter key from raml definition
+		if ramlType.DisplayName != "" {
+			customType.Name = ramlType.DisplayName
+		}
+
+		customTypes = append(customTypes, *customType)
 	}
 
 	return
@@ -188,9 +217,9 @@ func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customT
 
 // handleTraits Generic method which handles raml's trait definition.
 func (tra *RamlTransformer) handleTraits(ramlTraits map[string]raml.Trait) (traits []definition.Trait) {
-	for name, ramlTrait := range ramlTraits {
+	for _, ramlTrait := range ramlTraits {
 		trait := definition.Trait{
-			Name:        name,
+			Name:        ramlTrait.Name,
 			Usage:       ramlTrait.Usage,
 			Description: ramlTrait.Description,
 			Href: definition.Href{
@@ -222,8 +251,8 @@ func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.Se
 		scheme := new(definition.SecurityScheme)
 
 		// It takes the parameter name over the parameter key from raml definition
-		if scheme.Name = ramlSchemeName; ramlScheme.Name != "" {
-			scheme.Name = ramlScheme.Name
+		if scheme.Name = ramlSchemeName; ramlScheme.DisplayName != "" {
+			scheme.Name = ramlScheme.DisplayName
 		}
 
 		scheme.Type = ramlScheme.Type
@@ -275,8 +304,7 @@ func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resource
 			resources = append(resources, res)
 		}
 	default:
-		//@todo Process better the type of errors
-		panic("unsupported type")
+		errors.New("The resource's type is unsupported")
 	}
 	return
 }
