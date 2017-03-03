@@ -3,6 +3,7 @@ package generator
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
@@ -10,14 +11,17 @@ import (
 )
 
 func TestGenerator_Generate_Integration(t *testing.T) {
+	outputDir, err := ioutil.TempDir("", "")
+	assert.Nil(t, err)
+
 	// Clean up
 	defer func() {
-		os.RemoveAll("/tmp/rubberdoc")
+		os.RemoveAll(outputDir)
 	}()
 
 	checks := []struct {
 		ApiDef         definition.Api
-		ConfigFile     string
+		Config         ConfigYaml
 		Output         string
 		ExpectedOutput string
 	}{
@@ -29,8 +33,18 @@ func TestGenerator_Generate_Integration(t *testing.T) {
 				Protocols:  []definition.Protocol{"HTTPS", "HTTP"},
 				MediaTypes: []definition.MediaType{"application/json"},
 			},
-			"testdata/html/config.yaml",
-			"/tmp/rubberdoc/output/html/simple.html",
+			ConfigYaml{
+				Combine: false,
+				SrcDir:  "testdata/html",
+				DstDir:  filepath.Join(outputDir, "simple"),
+				TemplateFiles: []TemplateConfigYaml{
+					{
+						SrcFilename: "simple.tmpl",
+						DstFilename: "index.html",
+					},
+				},
+			},
+			filepath.Join(outputDir, "simple/index.html"),
 			"testdata/html/simple.html",
 		},
 		{
@@ -41,17 +55,41 @@ func TestGenerator_Generate_Integration(t *testing.T) {
 				Protocols:  []definition.Protocol{"HTTPS", "HTTP"},
 				MediaTypes: []definition.MediaType{"application/json"},
 			},
-			"testdata/html/advanced/config.yaml",
-			"/tmp/rubberdoc/output/html/advanced/index.html",
+			ConfigYaml{
+				Combine:        true,
+				SrcDir:         "testdata/html/advanced",
+				DstDir:         filepath.Join(outputDir, "advanced"),
+				OutputFilename: "index.html",
+				TemplateFiles: []TemplateConfigYaml{
+					{
+						SrcFilename: "base.tmpl",
+					},
+					{
+						SrcFilename: "title.tmpl",
+					},
+					{
+						SrcFilename: "version.tmpl",
+					},
+					{
+						SrcFilename: "baseUri.tmpl",
+					},
+					{
+						SrcFilename: "protocols.tmpl",
+					},
+					{
+						SrcFilename: "mediaTypes.tmpl",
+					},
+				},
+			},
+			filepath.Join(outputDir, "advanced/index.html"),
 			"testdata/html/advanced/index.html",
 		},
 	}
 
 	for _, check := range checks {
-		gen, err := NewGenerator(check.ConfigFile, check.ApiDef)
-		assert.Nil(t, err)
+		gen := &Generator{check.ApiDef, check.Config}
 
-		err = gen.Generate()
+		err := gen.Generate()
 		assert.Nil(t, err)
 
 		expected, err := testLoadFile(check.ExpectedOutput)

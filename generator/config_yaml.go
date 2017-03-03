@@ -3,6 +3,8 @@ package generator
 import (
 	"io/ioutil"
 
+	"path/filepath"
+
 	"github.com/gigforks/yaml"
 	"github.com/pkg/errors"
 )
@@ -58,13 +60,17 @@ func (c ConfigYaml) Dst() string {
 
 // Output Return the filename with the result of all parsed templates
 func (c ConfigYaml) Output() string {
-	return c.OutputFilename
+	return filepath.Join(c.DstDir, c.OutputFilename)
 }
 
 // Templates Returns all the templates to be processed
 func (c ConfigYaml) TemplatesConfig() (tmpls []TemplateConfig) {
 	for _, tmpl := range c.TemplateFiles {
-		tmpls = append(tmpls, TemplateConfig{tmpl.SrcFilename, tmpl.DstFilename})
+		tc := TemplateConfig{
+			filepath.Join(c.Src(), tmpl.SrcFilename),
+			filepath.Join(c.Dst(), tmpl.DstFilename),
+		}
+		tmpls = append(tmpls, tc)
 	}
 	return
 }

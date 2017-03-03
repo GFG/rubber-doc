@@ -4,8 +4,6 @@ import (
 	"html/template"
 	"os"
 
-	"path/filepath"
-
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 )
 
@@ -27,20 +25,19 @@ func NewGenerator(configFile string, def definition.Api) (gen *Generator, err er
 func (gen *Generator) Generate() (err error) {
 	var t *template.Template
 
-	switch gen.config().IsCombined() {
-	case true:
+	if gen.config().IsCombined() {
 		var tmpls []string
 		for _, tmpl := range gen.config().TemplatesConfig() {
-			tmpls = append(tmpls, filepath.Join(gen.config().Src(), tmpl.Src()))
+			tmpls = append(tmpls, tmpl.Src())
 		}
 
 		if t, err = template.ParseFiles(tmpls...); err == nil {
 			err = gen.processTemplate(t, gen.config().Output())
 		}
 
-	case false:
+	} else {
 		for _, tmpl := range gen.config().TemplatesConfig() {
-			if t, err = template.ParseFiles(filepath.Join(gen.config().Src(), tmpl.Src())); err == nil {
+			if t, err = template.ParseFiles(tmpl.Src()); err == nil {
 				err = gen.processTemplate(t, tmpl.Dst())
 			}
 		}
@@ -55,7 +52,7 @@ func (gen *Generator) processTemplate(t *template.Template, outputFile string) (
 	}
 
 	var f *os.File
-	if f, err = os.Create(filepath.Join(gen.config().Dst(), outputFile)); err != nil {
+	if f, err = os.Create(outputFile); err != nil {
 		return
 	}
 	defer f.Close()

@@ -26,7 +26,7 @@ type CustomType struct {
 	Default     interface{}
 	Enum        interface{}
 	Properties  map[string]interface{}
-	Examples    map[string]interface{}
+	Examples    []interface{}
 }
 
 // Trait Optional definition that

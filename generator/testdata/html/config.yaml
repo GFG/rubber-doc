@@ -1,7 +1,0 @@
-combined: false
-srcDir: "testdata/html"
-dstDir: "/tmp/rubberdoc/output/html"
-templates:
-  -
-    src: "simple.tmpl"
-    dst: "simple.html"

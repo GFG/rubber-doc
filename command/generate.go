@@ -44,12 +44,12 @@ func (c *GenerateCommand) Execute() (err error) {
 
 	var def *definition.Api
 	if def, err = p.Parse(c.SpecFile, f); err != nil {
-		return err
+		return
 	}
 
 	var gen *generator.Generator
 	if gen, err = generator.NewGenerator(c.ConfigFile, *def); err != nil {
-		return err
+		return
 	}
 
 	err = gen.Generate()

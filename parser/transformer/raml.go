@@ -194,7 +194,14 @@ func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customT
 			Type:        ramlType.Type,
 			Enum:        ramlType.Enum,
 			Default:     ramlType.Default,
-			Examples:    ramlType.Examples,
+		}
+
+		for _, example := range ramlType.Examples {
+			customType.Examples = append(customType.Examples, example)
+		}
+
+		if ramlType.Example != nil {
+			customType.Examples = append(customType.Examples, ramlType.Example)
 		}
 
 		// It takes the parameter name over the parameter key from raml definition
