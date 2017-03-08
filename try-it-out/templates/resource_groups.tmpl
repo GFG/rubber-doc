@@ -1,0 +1,12 @@
+{{define "resourceGroups" -}}
+    <div class="rd-section">
+        <h2 class="rd-section-head">Resources</h2>
+        <ul id="resources" class="rd-collapsible-list">
+            {{range $groupN, $group := . -}}
+                {{range $resourceN, $resource := $group.Resources -}}
+                    {{template "resource" $resource}}
+                {{- end}}
+            {{- end}}
+        </ul>
+    </div>
+{{- end}}

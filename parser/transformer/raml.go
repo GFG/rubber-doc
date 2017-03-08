@@ -3,6 +3,8 @@ package transformer
 import (
 	"strconv"
 
+	"strings"
+
 	"github.com/Jumpscale/go-raml/raml"
 	"github.com/pkg/errors"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
@@ -128,7 +130,7 @@ func (tra *RamlTransformer) handleOptions(ramlOpts []raml.DefinitionChoice) (opt
 	for _, ramlOpt := range ramlOpts {
 		opt := new(definition.Option)
 
-		opt.Name = ramlOpt.Name
+		opt.Name = tra.removeLibraryName(ramlOpt.Name)
 
 		if ramlOpt.Parameters != nil {
 			opt.Parameters = ramlOpt.Parameters
@@ -187,6 +189,7 @@ func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.H
 
 // handleTypes Generic method which handles raml's type definition.
 func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customTypes []definition.CustomType) {
+	// @todo improve the mapping From raml's type to a api's custom type
 	for name, ramlType := range ramlTypes {
 		customType := &definition.CustomType{
 			Name:        name,
@@ -194,6 +197,7 @@ func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customT
 			Type:        ramlType.Type,
 			Enum:        ramlType.Enum,
 			Default:     ramlType.Default,
+			Properties:  ramlType.Properties,
 		}
 
 		for _, example := range ramlType.Examples {
@@ -320,12 +324,12 @@ func (tra *RamlTransformer) handleResource(ramlRes raml.Resource) definition.Res
 		},
 		Is:        tra.handleOptions(ramlRes.Is),
 		SecuredBy: tra.handleOptions(ramlRes.SecuredBy),
-		Actions:   tra.handleResourceMethods(ramlRes.Methods),
+		Actions:   tra.handleResourceMethods(ramlRes, ramlRes.Methods),
 	}
 }
 
 // handleResource Generic method which handles raml's method definition.
-func (tra *RamlTransformer) handleResourceMethods(ramlMethods []*raml.Method) (actions []definition.ResourceAction) {
+func (tra *RamlTransformer) handleResourceMethods(ramlRes raml.Resource, ramlMethods []*raml.Method) (actions []definition.ResourceAction) {
 	for _, ramlMethod := range ramlMethods {
 		action := new(definition.ResourceAction)
 
@@ -335,7 +339,14 @@ func (tra *RamlTransformer) handleResourceMethods(ramlMethods []*raml.Method) (a
 			Parameters: tra.handleParameters(ramlMethod.QueryParameters),
 		}
 		action.Is = tra.handleOptions(ramlMethod.Is)
+
+		// Inherits securedBy options from the parent securedBy if not present
 		action.SecuredBy = tra.handleOptions(ramlMethod.SecuredBy)
+		if action.SecuredBy == nil {
+			action.SecuredBy = tra.handleOptions(ramlRes.SecuredBy)
+		}
+
+		action.Method = ramlMethod.Name
 
 		req := &definition.Request{
 			Method:  ramlMethod.Name,
@@ -355,6 +366,7 @@ func (tra *RamlTransformer) handleResourceMethods(ramlMethods []*raml.Method) (a
 // handleResponses Generic method which handles raml's responses definition.
 // Since raml's specification doesn't consider multiple requests, we have to use the same request definition for each created definition.Transaction
 func (tra *RamlTransformer) handleResponses(req *definition.Request, ramlResponses map[raml.HTTPCode]raml.Response) (transactions []definition.Transaction) {
+	//@todo Improve the method to consider multiple request/response or without request or without response.
 	//Responses are not always present
 	if req != nil && len(ramlResponses) == 0 {
 		tran := definition.Transaction{
@@ -380,12 +392,15 @@ func (tra *RamlTransformer) handleResponses(req *definition.Request, ramlRespons
 		resp.Headers = tra.handleHeaders(ramlResp.Headers)
 		resp.Body = tra.handleBodies(ramlResp.Bodies)
 
-		tran := definition.Transaction{
-			Request:  *req,
-			Response: *resp,
+		tran := new(definition.Transaction)
+
+		if req != nil {
+			tran.Request = *req
 		}
 
-		transactions = append(transactions, tran)
+		tran.Response = *resp
+
+		transactions = append(transactions, *tran)
 	}
 
 	return
@@ -397,31 +412,52 @@ func (tra *RamlTransformer) handleBodies(ramlBodies raml.Bodies) (bodies []defin
 		return
 	}
 
-	body := &definition.Body{
-		Type:        ramlBodies.Type,
-		Description: ramlBodies.Description,
-	}
+	body := new(definition.Body)
 
 	if ramlBodies.ApplicationJSON != nil {
 		body.MediaType = definition.MediaType("application/json")
 
+		// t will be the body's type
+		bodyType := tra.removeLibraryName(ramlBodies.ApplicationJSON.Type)
+
+		// If properties is empty then it is not a api's CustomType
+		if ramlBodies.ApplicationJSON.Properties != nil {
+			cType := &definition.CustomType{
+				Type: bodyType,
+			}
+
+			if ramlBodies.ApplicationJSON.Properties != nil {
+				cType.Properties = ramlBodies.ApplicationJSON.Properties
+			}
+
+			body.CustomType = cType
+
+		} else {
+			body.Type = bodyType
+		}
+
+	} else {
+
+		body.Type = ramlBodies.Type
+		body.Description = ramlBodies.Description
+		body.Example = ramlBodies.Example
+
 		if ramlBodies.Example != "" {
 			body.Example = ramlBodies.Example
 		}
-
-		cType := &definition.CustomType{
-			Type: ramlBodies.ApplicationJSON.Type,
-		}
-
-		if ramlBodies.ApplicationJSON.Properties != nil {
-			cType.Properties = ramlBodies.ApplicationJSON.Properties
-		}
-
-		body.CustomType = *cType
 	}
 
 	bodies = append(bodies, *body)
 
 	//@todo Add here your code to support other media types for bodies
 	return
+}
+
+// removeLibraryName It removes the library's namespace from a string
+func (tra *RamlTransformer) removeLibraryName(name string) string {
+	s := strings.Split(strings.TrimSpace(name), ".")
+	if len(s) == 2 {
+		return s[1]
+	}
+	return name
 }

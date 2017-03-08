@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{.Title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="vendor/normalize/normalize.min.css">
+    <link rel="stylesheet" href="css/try-it-out.css">
+    <link rel="stylesheet" href="css/rubber-doc.css">
+</head>
+<body>
+    {{"<!--[if lt IE 9]>"|Comment}}
+        <p class="rd-browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    {{"<![endif]-->"|Comment}}
+
+    <div id="rubber-doc-container" class="rubber-doc">
+
+        <h1>{{.Title}}</h1>
+
+        <div class="rd-section">
+            <h2 class="rd-section-head">Getting Started</h2>
+            <ul id="getting-started" class="rd-collapsible-list">
+                <li class="rd-collapsible">
+                    <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                        <span class="rd-icon-toggle"></span>
+                        Introduction
+                    </a>
+                    <div class="rd-collapsible-content" data-rd-collapsible="content">
+                        <div class="rd-collapsible-content-inner">Introduction content</div>
+                    </div>
+                </li>
+                <li class="rd-collapsible">
+                    <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                        <span class="rd-icon-toggle"></span>
+                        Authentication
+                    </a>
+                    <div class="rd-collapsible-content" data-rd-collapsible="content">
+                        <div class="rd-collapsible-content-inner">Authentication content</div>
+                    </div>
+                </li>
+                <li class="rd-collapsible">
+                    <a href="#" class="rd-collapsible-head" data-rd-collapsible="link">
+                        <span class="rd-icon-toggle"></span>
+                        Errors
+                    </a>
+                    <div class="rd-collapsible-content" data-rd-collapsible="content">
+                        <div class="rd-collapsible-content-inner">Errors content</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        {{template "resourceGroups" .ResourceGroups}}
+
+    </div>
+    <script src="vendor/jquery/jquery.min.js" ></script>
+    <script src="js/rubber-doc.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            rubberDoc.init($('#rubber-doc-container'));
+        });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+combined: true
+srcDir: "try-it-out/templates"
+dstDir: "try-it-out"
+output: "index.html"
+templates:
+  -
+    src: "try_it_out.tmpl"
+  -
+    src: "custom_type.tmpl"
+  -
+    src: "resource_groups.tmpl"
+  -
+    src: "resource.tmpl"
+  -
+    src: "resource_actions.tmpl"
+  -
+    src: "resource_siblings.tmpl"
+  -
+    src: "resource_sibling.tmpl"

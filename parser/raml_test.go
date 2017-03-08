@@ -284,7 +284,7 @@ func assertResources(t *testing.T) {
 									Description: "",
 									Is: []definition.Option{
 										{
-											Name: "useTraits.secured",
+											Name: "secured",
 										},
 									},
 									SecuredBy: []definition.Option{
@@ -301,7 +301,17 @@ func assertResources(t *testing.T) {
 										{
 											Title:       "",
 											Description: "Request Example",
-											Method:      "",
+											Method:      "GET",
+											SecuredBy: []definition.Option{
+												{
+													Name: "oauth_2_0",
+													Parameters: map[string]interface{}{
+														"scopes": []interface{}{
+															"users.read",
+														},
+													},
+												},
+											},
 											Href: definition.Href{
 												Path: "",
 												Parameters: []definition.Parameter{
@@ -342,17 +352,9 @@ func assertResources(t *testing.T) {
 														Body: []definition.Body{
 															{
 																Description: "",
-																Type:        "",
-																CustomType: definition.CustomType{
-																	Name:        "",
-																	Description: "",
-																	Type:        "useTypes.Example",
-																	Default:     nil,
-																	Properties:  nil,
-																	Examples:    nil,
-																},
-																MediaType: "application/json",
-																Example:   "",
+																Type:        "Example",
+																CustomType:  nil,
+																MediaType:   "application/json",
 															},
 														},
 													},
@@ -382,12 +384,12 @@ func assertResources(t *testing.T) {
 									Description: "",
 									Is: []definition.Option{
 										{
-											Name: "useTraits.secured",
+											Name: "secured",
 										},
 									},
 									SecuredBy: []definition.Option{
 										{
-											Name:       "useSchemes.oauth_1_0",
+											Name:       "oauth_1_0",
 											Parameters: nil,
 										},
 									},
@@ -395,7 +397,7 @@ func assertResources(t *testing.T) {
 										{
 											Title:       "",
 											Description: "Request Example",
-											Method:      "",
+											Method:      "GET",
 											Href: definition.Href{
 												Path: "",
 												Parameters: []definition.Parameter{
@@ -413,7 +415,12 @@ func assertResources(t *testing.T) {
 													},
 												},
 											},
-											SecuredBy: nil,
+											SecuredBy: []definition.Option{
+												{
+													Name:       "oauth_1_0",
+													Parameters: nil,
+												},
+											},
 											Transactions: []definition.Transaction{
 												{
 													Request: definition.Request{
@@ -437,17 +444,9 @@ func assertResources(t *testing.T) {
 														Body: []definition.Body{
 															{
 																Description: "",
-																Type:        "",
-																CustomType: definition.CustomType{
-																	Name:        "",
-																	Description: "",
-																	Type:        "useTypes.Example",
-																	Default:     nil,
-																	Properties:  nil,
-																	Examples:    nil,
-																},
-																MediaType: "application/json",
-																Example:   "",
+																Type:        "Example",
+																CustomType:  nil,
+																MediaType:   "application/json",
 															},
 														},
 													},
@@ -488,7 +487,7 @@ func assertResources(t *testing.T) {
 									Description: "",
 									Is: []definition.Option{
 										{
-											Name: "useTraits.secured",
+											Name: "secured",
 										},
 									},
 									SecuredBy: []definition.Option{
@@ -505,6 +504,7 @@ func assertResources(t *testing.T) {
 										{
 											Title:       "",
 											Description: "Request Example",
+											Method:      "GET",
 											Href: definition.Href{
 												Path: "",
 												Parameters: []definition.Parameter{
@@ -522,7 +522,16 @@ func assertResources(t *testing.T) {
 													},
 												},
 											},
-											SecuredBy: nil,
+											SecuredBy: []definition.Option{
+												{
+													Name: "oauth_2_0",
+													Parameters: map[string]interface{}{
+														"scopes": []interface{}{
+															"users.read",
+														},
+													},
+												},
+											},
 											Transactions: []definition.Transaction{
 												{
 													Request: definition.Request{
@@ -546,17 +555,10 @@ func assertResources(t *testing.T) {
 														Body: []definition.Body{
 															{
 																Description: "",
-																Type:        "",
-																CustomType: definition.CustomType{
-																	Name:        "",
-																	Description: "",
-																	Type:        "useTypes.Example",
-																	Default:     nil,
-																	Properties:  nil,
-																	Examples:    nil,
-																},
-																MediaType: "application/json",
-																Example:   "",
+																Type:        "Example",
+																CustomType:  nil,
+																MediaType:   "application/json",
+																Example:     "",
 															},
 														},
 													},
