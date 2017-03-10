@@ -3,7 +3,7 @@ package parser
 import (
 	"testing"
 
-	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/stretchr/testify/assert"
 )
