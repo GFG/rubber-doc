@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/walker"
 )
@@ -14,13 +15,16 @@ func NewBlueprintTransformer() Transformer {
 	return new(BlueprintTransformer)
 }
 
-func (f *BlueprintTransformer) Transform(data interface{}) (def *definition.Api) {
+func (f *BlueprintTransformer) Transform(data interface{}) (def *definition.Api, err error) {
 	el, ok := data.(walker.ObjectWalker)
 	if !ok {
+		err = errors.New("The data's struct given isn't supported by the Blueprint's Transformer")
 		return
 	}
 
-	return f.handleContent(&el)
+	def = f.handleContent(&el)
+
+	return
 }
 
 //Blueprint transformation methods, names are bound to what they parse
@@ -122,7 +126,6 @@ func (f *BlueprintTransformer) transaction(el []*walker.ObjectWalker) definition
 func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition.Transaction) {
 	x.Request.Title = child.Path("meta.title").String()
 	x.Request.Description = f.handleDescription(child)
-	x.Request.Method = child.Path("attributes.method").String()
 	x.Request.Headers = f.handleHeaders(child.Path("attributes.headers"))
 
 	cx, err := child.Path("content").Children()

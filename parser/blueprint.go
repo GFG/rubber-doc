@@ -52,7 +52,7 @@ func (bp BlueprintParser) Parse(filename string, tra transformer.Transformer) (d
 	}
 
 	if err = json.NewDecoder(bytes.NewReader(bp.serialize(result))).Decode(&data); err == nil {
-		def = tra.Transform(walker.NewObjectWalker(data))
+		def, err = tra.Transform(walker.NewObjectWalker(data))
 	}
 
 	return

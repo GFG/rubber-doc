@@ -20,9 +20,10 @@ type Api struct {
 
 // CustomTypeByName Returns a CustomType struct based on its name
 func (def Api) CustomTypeByName(name string) (ct CustomType) {
-	for _, cType := range def.CustomTypes {
-		if cType.Name == name {
-			ct = cType
+	for _, customType := range def.CustomTypes {
+		if customType.Name == name {
+			ct = customType
+			break
 		}
 	}
 	return

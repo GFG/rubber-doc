@@ -16,9 +16,10 @@ func NewRamlTransformer() Transformer {
 	return new(RamlTransformer)
 }
 
-func (tra *RamlTransformer) Transform(data interface{}) (def *definition.Api) {
+func (tra *RamlTransformer) Transform(data interface{}) (def *definition.Api, err error) {
 	ramlDef, ok := data.(raml.APIDefinition)
 	if !ok {
+		err = errors.New("The data's struct given isn't supported by the RAML's Transformer")
 		return
 	}
 
@@ -33,7 +34,7 @@ func (tra *RamlTransformer) Transform(data interface{}) (def *definition.Api) {
 	tra.customTypes(ramlDef, def)
 	tra.securitySchemes(ramlDef, def)
 	tra.securedBy(ramlDef, def)
-	tra.resourceGroups(ramlDef, def)
+	err = tra.resourceGroups(ramlDef, def)
 	tra.traits(ramlDef.Traits, def)
 	tra.libraries(ramlDef.Libraries, def)
 
@@ -67,8 +68,9 @@ func (tra *RamlTransformer) protocols(ramlDef raml.APIDefinition, def *definitio
 
 // mediaType Transforms raml's mediaType definition in api's mediaType definition
 func (tra *RamlTransformer) mediaType(ramlDef raml.APIDefinition, def *definition.Api) {
-	// @todo Apply to raml's parser support for multiple mediaType.
-	def.MediaTypes = append(def.MediaTypes, definition.MediaType(ramlDef.MediaType))
+	if ramlDef.MediaType != "" {
+		def.MediaTypes = append(def.MediaTypes, definition.MediaType(ramlDef.MediaType))
+	}
 }
 
 // customTypes Transforms raml's customTypes definition in api's customTypes definition
@@ -87,13 +89,15 @@ func (tra *RamlTransformer) securedBy(ramlDef raml.APIDefinition, def *definitio
 }
 
 // resourceGroups Groups all the raml's resources definition
-func (tra *RamlTransformer) resourceGroups(ramlDef raml.APIDefinition, def *definition.Api) {
-	//ResourceGroups is an aggregator of resources that is being used by the api definition but not yet supported by RAML.
-	def.ResourceGroups = []definition.ResourceGroup{
-		{
-			Resources: tra.handleResources(ramlDef.Resources),
-		},
+func (tra *RamlTransformer) resourceGroups(ramlDef raml.APIDefinition, def *definition.Api) (err error) {
+	var resources []definition.Resource
+	if resources, err = tra.handleResources(ramlDef.Resources); err == nil {
+		if len(resources) > 0 {
+			//ResourceGroups is an aggregator of resources that is being used by the api definition but not yet supported by RAML.
+			def.ResourceGroups = append(def.ResourceGroups, definition.ResourceGroup{Resources: resources})
+		}
 	}
+	return
 }
 
 // traits Transforms raml's securitySchemes definition in api's traits definition
@@ -153,7 +157,7 @@ func (tra *RamlTransformer) handleParameters(ramlParams map[string]raml.NamedPar
 		}
 
 		param.Description = ramlParam.Description
-		param.Type = ramlParam.Type
+		param.Type = tra.removeLibraryName(ramlParam.Type)
 		param.Required = ramlParam.Required
 		param.Pattern = ramlParam.Pattern
 		param.MinLength = ramlParam.MinLength
@@ -170,6 +174,10 @@ func (tra *RamlTransformer) handleParameters(ramlParams map[string]raml.NamedPar
 
 // handleHeaders Generic method which handles raml's headers definition.
 func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.Header) (headers []definition.Header) {
+	if len(ramlHeaders) == 0 {
+		return
+	}
+
 	for name, ramlHead := range ramlHeaders {
 		header := new(definition.Header)
 
@@ -189,7 +197,6 @@ func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.H
 
 // handleTypes Generic method which handles raml's type definition.
 func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customTypes []definition.CustomType) {
-	// @todo improve the mapping From raml's type to a api's custom type
 	for name, ramlType := range ramlTypes {
 		customType := &definition.CustomType{
 			Name:        name,
@@ -197,11 +204,17 @@ func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customT
 			Type:        ramlType.Type,
 			Enum:        ramlType.Enum,
 			Default:     ramlType.Default,
-			Properties:  ramlType.Properties,
 		}
 
-		for _, example := range ramlType.Examples {
-			customType.Examples = append(customType.Examples, example)
+		// We need to remove the library name space from the type
+		if t, ok := customType.Type.(string); ok {
+			customType.Type = tra.removeLibraryName(t)
+		}
+
+		customType.Properties = tra.handleCustomTypeProperties(ramlType.Properties)
+
+		for _, e := range ramlType.Examples {
+			customType.Examples = append(customType.Examples, e)
 		}
 
 		if ramlType.Example != nil {
@@ -232,16 +245,7 @@ func (tra *RamlTransformer) handleTraits(ramlTraits map[string]raml.Trait) (trai
 			Protocols: tra.handleProtocols(ramlTrait.Protocols),
 		}
 
-		var req *definition.Request
-		if len(ramlTrait.Headers) != 0 || ramlTrait.Bodies.ApplicationJSON != nil || ramlTrait.Bodies.Type != "" {
-			req = &definition.Request{
-				Headers: tra.handleHeaders(ramlTrait.Headers),
-			}
-
-			req.Body = tra.handleBodies(ramlTrait.Bodies)
-		}
-
-		trait.Transactions = tra.handleResponses(req, ramlTrait.Responses)
+		trait.Transactions = tra.buildTransactions(ramlTrait.Headers, &ramlTrait.Bodies, ramlTrait.Responses)
 
 		traits = append(traits, trait)
 	}
@@ -269,14 +273,7 @@ func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.Se
 			})
 		}
 
-		var req *definition.Request
-		if len(ramlScheme.DescribedBy.Headers) != 0 {
-			req = &definition.Request{
-				Headers: tra.handleHeaders(ramlScheme.DescribedBy.Headers),
-			}
-		}
-
-		scheme.Transactions = tra.handleResponses(req, ramlScheme.DescribedBy.Responses)
+		scheme.Transactions = tra.buildTransactions(ramlScheme.DescribedBy.Headers, nil, ramlScheme.DescribedBy.Responses)
 
 		schemes = append(schemes, *scheme)
 	}
@@ -285,14 +282,16 @@ func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.Se
 }
 
 // handleResources Generic method which handles raml's resources definition.
-func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resources []definition.Resource) {
+func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resources []definition.Resource, err error) {
 	switch r := ramlResources.(type) {
 	case map[string]raml.Resource:
 		for _, ramlRes := range r {
 			res := tra.handleResource(ramlRes)
 
 			if ramlRes.Nested != nil {
-				res.Resources = tra.handleResources(ramlRes.Nested)
+				if res.Resources, err = tra.handleResources(ramlRes.Nested); err != nil {
+					return
+				}
 			}
 
 			resources = append(resources, res)
@@ -300,15 +299,15 @@ func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resource
 	case map[string]*raml.Resource:
 		for _, ramlRes := range r {
 			res := tra.handleResource(*ramlRes)
-
 			if ramlRes.Nested != nil {
-				res.Resources = tra.handleResources(ramlRes.Nested)
+				if res.Resources, err = tra.handleResources(ramlRes.Nested); err != nil {
+					return
+				}
 			}
-
 			resources = append(resources, res)
 		}
 	default:
-		errors.New("The resource's type is unsupported")
+		err = errors.New("The resource's type is unsupported")
 	}
 	return
 }
@@ -347,15 +346,7 @@ func (tra *RamlTransformer) handleResourceMethods(ramlRes raml.Resource, ramlMet
 		}
 
 		action.Method = ramlMethod.Name
-
-		req := &definition.Request{
-			Method:  ramlMethod.Name,
-			Headers: tra.handleHeaders(ramlMethod.Headers),
-		}
-
-		req.Body = tra.handleBodies(ramlMethod.Bodies)
-
-		action.Transactions = tra.handleResponses(req, ramlMethod.Responses)
+		action.Transactions = tra.buildTransactions(ramlMethod.Headers, &ramlMethod.Bodies, ramlMethod.Responses)
 
 		actions = append(actions, *action)
 	}
@@ -363,52 +354,33 @@ func (tra *RamlTransformer) handleResourceMethods(ramlRes raml.Resource, ramlMet
 	return
 }
 
-// handleResponses Generic method which handles raml's responses definition.
-// Since raml's specification doesn't consider multiple requests, we have to use the same request definition for each created definition.Transaction
-func (tra *RamlTransformer) handleResponses(req *definition.Request, ramlResponses map[raml.HTTPCode]raml.Response) (transactions []definition.Transaction) {
-	//@todo Improve the method to consider multiple request/response or without request or without response.
-	//Responses are not always present
-	if req != nil && len(ramlResponses) == 0 {
-		tran := definition.Transaction{
-			Request: *req,
-		}
-
-		transactions = append(transactions, tran)
+// handleRequest It creates an API's request based on RAML's request parameters
+func (tra *RamlTransformer) handleRequest(headers map[raml.HTTPHeader]raml.Header, bodies *raml.Bodies) (req *definition.Request) {
+	if len(headers) == 0 && bodies == nil {
+		return
 	}
 
-	for httpCode, ramlResp := range ramlResponses {
-		resp := new(definition.Response)
-
-		// It takes the parameter name over the parameter key from raml definition
-		var code = string(httpCode)
-		if ramlResp.HTTPCode != "" {
-			code = string(ramlResp.HTTPCode)
-		}
-
-		//@todo Process the error coming from the conversion
-		resp.StatusCode, _ = strconv.Atoi(code)
-
-		resp.Description = ramlResp.Description
-		resp.Headers = tra.handleHeaders(ramlResp.Headers)
-		resp.Body = tra.handleBodies(ramlResp.Bodies)
-
-		tran := new(definition.Transaction)
-
-		if req != nil {
-			tran.Request = *req
-		}
-
-		tran.Response = *resp
-
-		transactions = append(transactions, *tran)
+	return &definition.Request{
+		Headers: tra.handleHeaders(headers),
+		Body:    tra.handleBodies(bodies),
 	}
+}
+
+// handleResponse It creates an API's response based on RAML's response
+func (tra *RamlTransformer) handleResponse(code raml.HTTPCode, ramlResp raml.Response) (resp *definition.Response) {
+	resp = new(definition.Response)
+
+	resp.StatusCode, _ = strconv.Atoi(string(code))
+	resp.Description = ramlResp.Description
+	resp.Headers = tra.handleHeaders(ramlResp.Headers)
+	resp.Body = tra.handleBodies(&ramlResp.Bodies)
 
 	return
 }
 
 // handleBodies Generic method which handles raml's bodies definition.
-func (tra *RamlTransformer) handleBodies(ramlBodies raml.Bodies) (bodies []definition.Body) {
-	if ramlBodies.ApplicationJSON == nil && ramlBodies.Type == "" {
+func (tra *RamlTransformer) handleBodies(ramlBodies *raml.Bodies) (bodies []definition.Body) {
+	if ramlBodies == nil || (ramlBodies.ApplicationJSON == nil && ramlBodies.Type == "") {
 		return
 	}
 
@@ -422,15 +394,15 @@ func (tra *RamlTransformer) handleBodies(ramlBodies raml.Bodies) (bodies []defin
 
 		// If properties is empty then it is not a api's CustomType
 		if ramlBodies.ApplicationJSON.Properties != nil {
-			cType := &definition.CustomType{
+			customType := &definition.CustomType{
 				Type: bodyType,
 			}
 
 			if ramlBodies.ApplicationJSON.Properties != nil {
-				cType.Properties = ramlBodies.ApplicationJSON.Properties
+				customType.Properties = tra.handleCustomTypeProperties(ramlBodies.ApplicationJSON.Properties)
 			}
 
-			body.CustomType = cType
+			body.CustomType = customType
 
 		} else {
 			body.Type = bodyType
@@ -438,7 +410,9 @@ func (tra *RamlTransformer) handleBodies(ramlBodies raml.Bodies) (bodies []defin
 
 	} else {
 
-		body.Type = ramlBodies.Type
+		//@todo Add here your code to support other media types for bodies
+
+		body.Type = tra.removeLibraryName(ramlBodies.Type)
 		body.Description = ramlBodies.Description
 		body.Example = ramlBodies.Example
 
@@ -448,8 +422,92 @@ func (tra *RamlTransformer) handleBodies(ramlBodies raml.Bodies) (bodies []defin
 	}
 
 	bodies = append(bodies, *body)
+	return
+}
 
-	//@todo Add here your code to support other media types for bodies
+// handleCustomTypeProperties It transforms RAML's custom properties into an API's array of definition.property
+func (tra *RamlTransformer) handleCustomTypeProperties(properties map[string]interface{}) (props []definition.CustomTypeProperty) {
+	for name, p := range properties {
+		// convert from map of interface to property
+		mapToProperty := func(val map[interface{}]interface{}) definition.CustomTypeProperty {
+			var p definition.CustomTypeProperty
+			p.Required = true
+			for k, v := range val {
+				switch k {
+				case "type":
+					p.Type = tra.removeLibraryName(v.(string))
+				case "required":
+					p.Required = v.(bool)
+				case "description":
+					p.Description = v.(string)
+				case "example":
+					p.Example = v.(string)
+				case "properties":
+					if properties, ok := v.(map[interface{}]interface{}); ok {
+						props := make(map[string]interface{})
+						for name, prop := range properties {
+							props[name.(string)] = prop
+						}
+						p.Properties = tra.handleCustomTypeProperties(props)
+					}
+				}
+			}
+			return p
+		}
+
+		prop := definition.CustomTypeProperty{Required: true}
+		switch p.(type) {
+		case string:
+			prop.Type = tra.removeLibraryName(p.(string))
+		case map[interface{}]interface{}:
+			prop = mapToProperty(p.(map[interface{}]interface{}))
+		case definition.CustomTypeProperty:
+			prop = p.(definition.CustomTypeProperty)
+		}
+
+		if prop.Type == "" { // if has no type, we set it as string
+			prop.Type = "string"
+		}
+
+		prop.Name = name
+
+		// if has "?" suffix, remove the "?" and set required=false
+		if strings.HasSuffix(prop.Name, "?") {
+			prop.Required = false
+			prop.Name = prop.Name[:len(prop.Name)-1]
+		}
+
+		props = append(props, prop)
+	}
+
+	return
+}
+
+// buildTransactions It holds the responsibility to create multiple transactions based on RAML's request/responses
+func (tra *RamlTransformer) buildTransactions(headers map[raml.HTTPHeader]raml.Header, bodies *raml.Bodies, responses map[raml.HTTPCode]raml.Response) (transactions []definition.Transaction) {
+	req := tra.handleRequest(headers, bodies)
+
+	if len(responses) > 0 {
+		for code, ramlResp := range responses {
+			resp := tra.handleResponse(code, ramlResp)
+
+			trans := definition.Transaction{
+				Response: *resp,
+			}
+
+			if req != nil {
+				trans.Request = *req
+			}
+
+			// Discard the request for the next iterations since it will be duplicated for each transaction-request
+			req = nil
+
+			transactions = append(transactions, trans)
+		}
+	} else if req != nil {
+		transactions = append(transactions, definition.Transaction{Request: *req})
+	}
+
 	return
 }
 

@@ -22,7 +22,7 @@ func (rp RamlParser) Parse(filename string, tra transformer.Transformer) (def *d
 		return
 	}
 
-	def = tra.Transform(*ramlDef)
+	def, err = tra.Transform(*ramlDef)
 
 	return
 }
