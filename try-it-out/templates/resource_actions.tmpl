@@ -1,0 +1,121 @@
+{{define "resourceActions" -}}
+    {{range $actionN, $action := .}}
+        <div data-rd-identifier="{{$action.Method|Lower}}" class="rd-collapsible-content rd-method-{{$action.Method|Lower}}">
+            {{$transaction := index $action.Transactions 0}}
+            <header class="rd-content-header">
+                <h3 class="rd-content-head">Request</h3>
+            </header>
+            <div class="rd-collapsible-content-inner">
+                <div class="rd-content-block first">
+                    <h3 class="rd-content-block-head">Description</h3>
+                    <p>{{$transaction.Request.Description}}</p>
+                </div>
+
+                {{if $action.Href.Parameters}}
+                    <div class="rd-content-block">
+                        <h3 class="rd-content-block-head">URI Parameters</h3>
+                        {{range $action.Href.Parameters -}}
+                            <div class="rd-definition-term">
+                                <h4>{{.Name}} <span class="definition">{{if .Required}}required{{else}}optional{{end}}</span></h4>
+                                <p>{{.Description}}</p>
+                            </div>
+                        {{- end}}
+                    </div>
+                {{- end}}
+
+                <div class="rd-content-block">
+                    {{if $action.SecuredBy}}
+                        <h3 class="rd-content-block-head">Security schemes</h3>
+                        {{range $action.SecuredBy -}}
+                            <p>
+                                <span class="rd-info-label">{{.Name}}</span>
+                            </p>
+                            {{if .Parameters.scopes}}
+                                <h4 class="rd-content-block-head-sub">Scopes</h4>
+                                <p>
+                                    {{range .Parameters.scopes -}}
+                                        <span class="rd-info-label">{{.}}</span>
+                                    {{- end}}
+                                </p>
+                            {{- end}}
+                        {{- end}}
+                    {{- end}}
+
+                    {{if $transaction.Request.Headers}}
+                        <h4 class="rd-content-block-head-sub">Headers</h4>
+                        {{range $transaction.Request.Headers -}}
+                            <div class="rd-definition-term">
+                                <h4>{{.Name}} <span class="definition">{{if .Example}}{{.Example}}{{end}}</span></h4>
+                                <p>{{.Description}}</p>
+                            </div>
+                        {{- end}}
+                    {{- end}}
+                </div>
+
+                {{if $transaction.Request.Body -}}
+                    {{range $transaction.Request.Body -}}
+                        <div data-rd-multi-selection="wrapper">
+                            <h4 class="rd-content-block-head-sub">Body</h4>
+                            <p data-rd-multi-selection="items-group" data-rd-selected="json">
+                                <a href="#" data-rd-multi-selection="item" data-rd-value="json"
+                                   class="rd-info-label rd-active">{{.MediaType}}</a>
+                            </p>
+
+                            {{if .CustomType -}}
+                                {{template "custom_type" .CustomType}}
+                            {{else}}
+                                {{$customType := .Type|CustomTypeByName}}
+                                {{if $customType -}}
+                                    {{template "custom_type" $customType}}
+                                {{- end}}
+                            {{- end}}
+                        </div>
+                    {{- end}}
+                {{- end}}
+            </div>
+            <header class="rd-content-header">
+                <h3 class="rd-content-head">Response</h3>
+            </header>
+            <div class="rd-vertical-tabs" data-rd-tabs="wrapper">
+                <div class="rd-vertical-tabs-header">
+                    <ul>
+
+                        {{range $transactionN, $transaction := $action.Transactions -}}
+                            <li data-rd-tabs="head" data-rd-target="{{$transaction.Response.StatusCode}}"><a href="#" class="rd-btn-2xx">{{$transaction.Response.StatusCode}}</a></li>
+                        {{- end}}
+                    </ul>
+                </div>
+                <div class="rd-vertical-tabs-contents" data-rd-tabs="contents">
+                    {{range $transactionN, $transaction := $action.Transactions -}}
+                        <div data-rd-identifier="{{$transaction.Response.StatusCode}}" class="rd-vertical-tabs-content {{if eq $transactionN 0}}show{{end}}">
+                            <div class="rd-content-block first">
+                                <h3 class="rd-content-block-head">Status {{$transaction.Response.StatusCode}}</h3>
+                                <p>{{$transaction.Response.Description}}</p>
+
+                                {{if $transaction.Response.Body -}}
+                                    {{range $transaction.Response.Body -}}
+                                        <div data-rd-multi-selection="wrapper">
+                                            <h4 class="rd-content-block-head-sub">Body</h4>
+                                            <p data-rd-multi-selection="items-group" data-rd-selected="json">
+                                                <a href="#" data-rd-multi-selection="item" data-rd-value="json"
+                                                   class="rd-info-label rd-active">{{.MediaType}}</a>
+                                            </p>
+                                            {{if .CustomType -}}
+                                                {{template "custom_type" .CustomType}}
+                                            {{else}}
+                                                {{$customType := .Type|CustomTypeByName}}
+                                                {{if $customType -}}
+                                                    {{template "custom_type" $customType}}
+                                                {{- end}}
+                                            {{- end}}
+                                        </div>
+                                    {{- end}}
+                                {{- end}}
+                            </div>
+                        </div>
+                    {{- end}}
+                </div>
+            </div>
+        </div>
+    {{- end}}
+{{- end}}

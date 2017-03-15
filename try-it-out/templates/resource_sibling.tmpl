@@ -1,0 +1,23 @@
+{{define "resourceSibling" -}}
+    <li class="rd-collapsible" data-rd-tabs="wrapper">
+        <div class="rd-collapsible-head">
+            <span class="rd-light">{{.Href.Path}}</span>
+            {{if .Actions}}
+                <ul class="rd-nested-tabs-nav">
+                    {{range .Actions -}}
+                        <li class="rd-nested-tabs-item rd-item-{{.Method|Lower}}"
+                            data-rd-tabs="head" data-rd-target="{{.Method|Lower}}" data-rd-type="resource-tab">
+                            <a href="#" class="rd-nested-tabs-item-inner">{{.Method}}</a>
+                            <span class="rd-close">x</span>
+                        </li>
+                    {{- end}}
+                </ul>
+            {{- end}}
+        </div>
+        <div data-rd-tabs="contents" data-rd-collapsible="content" class="hide">
+            {{if .Actions -}}
+                {{template "resourceActions" .Actions}}
+            {{- end}}
+        </div>
+    </li>
+{{- end}}

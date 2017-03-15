@@ -7,11 +7,20 @@ import (
 	"testing"
 
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
+	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/generator/config"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGenerator_Generate_Integration(t *testing.T) {
-	outputDir, err := ioutil.TempDir("", "")
+func TestGenerate_HTML_Integration(t *testing.T) {
+	var (
+		err       error
+		outputDir string
+		gen       Generator
+		expected  string
+		output    string
+	)
+
+	outputDir, err = ioutil.TempDir("", "")
 	assert.Nil(t, err)
 
 	// Clean up
@@ -21,7 +30,7 @@ func TestGenerator_Generate_Integration(t *testing.T) {
 
 	checks := []struct {
 		ApiDef         definition.Api
-		Config         ConfigYaml
+		Config         config.Config
 		Output         string
 		ExpectedOutput string
 	}{
@@ -33,19 +42,17 @@ func TestGenerator_Generate_Integration(t *testing.T) {
 				Protocols:  []definition.Protocol{"HTTPS", "HTTP"},
 				MediaTypes: []definition.MediaType{"application/json"},
 			},
-			ConfigYaml{
-				Combine: false,
-				SrcDir:  "testdata/html",
-				DstDir:  filepath.Join(outputDir, "simple"),
-				TemplateFiles: []TemplateConfigYaml{
-					{
-						SrcFilename: "simple.tmpl",
-						DstFilename: "index.html",
-					},
+			config.NewConfig(
+				false,
+				"testdata/html",
+				filepath.Join(outputDir, "simple"),
+				"",
+				[]config.TemplateConfig{
+					config.NewTemplateConfig("simple.tmpl", "index.html"),
 				},
-			},
+			),
 			filepath.Join(outputDir, "simple/index.html"),
-			"testdata/html/simple.html",
+			"testdata/html/index.html",
 		},
 		{
 			definition.Api{
@@ -54,48 +61,36 @@ func TestGenerator_Generate_Integration(t *testing.T) {
 				BaseURI:    "https://api.example.com",
 				Protocols:  []definition.Protocol{"HTTPS", "HTTP"},
 				MediaTypes: []definition.MediaType{"application/json"},
-			},
-			ConfigYaml{
-				Combine:        true,
-				SrcDir:         "testdata/html/advanced",
-				DstDir:         filepath.Join(outputDir, "advanced"),
-				OutputFilename: "index.html",
-				TemplateFiles: []TemplateConfigYaml{
-					{
-						SrcFilename: "base.tmpl",
-					},
-					{
-						SrcFilename: "title.tmpl",
-					},
-					{
-						SrcFilename: "version.tmpl",
-					},
-					{
-						SrcFilename: "baseUri.tmpl",
-					},
-					{
-						SrcFilename: "protocols.tmpl",
-					},
-					{
-						SrcFilename: "mediaTypes.tmpl",
-					},
+			}, config.NewConfig(
+				true,
+				"testdata/html/advanced",
+				filepath.Join(outputDir, "advanced"),
+				"index.html",
+				[]config.TemplateConfig{
+					config.NewTemplateConfig("base.tmpl", ""),
+					config.NewTemplateConfig("title.tmpl", ""),
+					config.NewTemplateConfig("version.tmpl", ""),
+					config.NewTemplateConfig("baseUri.tmpl", ""),
+					config.NewTemplateConfig("protocols.tmpl", ""),
+					config.NewTemplateConfig("mediaTypes.tmpl", ""),
 				},
-			},
+			),
 			filepath.Join(outputDir, "advanced/index.html"),
 			"testdata/html/advanced/index.html",
 		},
 	}
 
 	for _, check := range checks {
-		gen := &Generator{check.ApiDef, check.Config}
-
-		err := gen.Generate()
+		gen, err = NewHTMLGenerator(check.Config, check.ApiDef)
 		assert.Nil(t, err)
 
-		expected, err := testLoadFile(check.ExpectedOutput)
+		err = gen.Generate()
 		assert.Nil(t, err)
 
-		output, err := testLoadFile(check.Output)
+		expected, err = testLoadFile(check.ExpectedOutput)
+		assert.Nil(t, err)
+
+		output, err = testLoadFile(check.Output)
 		assert.Nil(t, err)
 
 		assert.Exactly(t, expected, output)

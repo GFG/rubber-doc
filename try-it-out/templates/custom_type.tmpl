@@ -1,0 +1,31 @@
+{{define "custom_type" -}}
+    <h4 class="rd-content-block-head-sub">{{.Name}}</h4>
+    {{range $name, $value := .Properties -}}
+        <div class="rd-definition-term">
+            <h4>{{$name}} <span class="definition">required, 34-34 characters string</span></h4>
+            <p>{{$value}}</p>
+        </div>
+    {{- end}}
+    <p data-rd-multi-selection="items-group" data-rd-selected="example1">
+        <a href="#" data-rd-multi-selection="item" data-rd-value="example1"
+           class="rd-info-label rd-active">Example1</a>
+        <a href="#" data-rd-multi-selection="item" data-rd-value="example2"
+           class="rd-info-label">Example2</a>
+    </p>
+    <div class="rd-code-example" data-rd-multi-selection="contents">
+        <div class="rd-code-example-item show" data-rd-identifier="multi-selection__json__example1">
+            {
+            "foo": "bar"
+            }
+        </div>
+        <div class="rd-code-example-item" data-rd-identifier="multi-selection__xml__example1">
+            xml example 1
+        </div>
+        <div class="rd-code-example-item" data-rd-identifier="multi-selection__json__example2">
+            json example 2
+        </div>
+        <div class="rd-code-example-item" data-rd-identifier="multi-selection__xml__example2">
+            xml example 2
+        </div>
+    </div>
+{{- end}}

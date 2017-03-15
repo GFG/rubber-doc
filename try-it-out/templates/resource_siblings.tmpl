@@ -1,0 +1,10 @@
+{{define "resourceSiblings" -}}
+    <ul class="rd-collapsible-list">
+        {{range $siblingN, $sibling := . -}}
+            {{template "resourceSibling" $sibling}}
+            {{if $sibling.Resources -}}
+                {{template "resourceSiblings" $sibling.Resources}}
+            {{- end}}
+        {{- end}}
+    </ul>
+{{- end}}
