@@ -73,49 +73,52 @@
                     {{- end}}
                 {{- end}}
             </div>
-            <header class="rd-content-header">
-                <h3 class="rd-content-head">Response</h3>
-            </header>
-            <div class="rd-vertical-tabs" data-rd-tabs="wrapper">
-                <div class="rd-vertical-tabs-header">
-                    <ul>
 
+            {{if $action.Transactions}}
+                <header class="rd-content-header">
+                    <h3 class="rd-content-head">Response</h3>
+                </header>
+                <div class="rd-vertical-tabs" data-rd-tabs="wrapper">
+                    <div class="rd-vertical-tabs-header">
+                        <ul>
+
+                            {{range $transactionN, $transaction := $action.Transactions -}}
+                                <li data-rd-tabs="head" data-rd-target="{{$transaction.Response.StatusCode}}"><a href="#" class="rd-btn-2xx">{{$transaction.Response.StatusCode}}</a></li>
+                            {{- end}}
+                        </ul>
+                    </div>
+                    <div class="rd-vertical-tabs-contents" data-rd-tabs="contents">
                         {{range $transactionN, $transaction := $action.Transactions -}}
-                            <li data-rd-tabs="head" data-rd-target="{{$transaction.Response.StatusCode}}"><a href="#" class="rd-btn-2xx">{{$transaction.Response.StatusCode}}</a></li>
-                        {{- end}}
-                    </ul>
-                </div>
-                <div class="rd-vertical-tabs-contents" data-rd-tabs="contents">
-                    {{range $transactionN, $transaction := $action.Transactions -}}
-                        <div data-rd-identifier="{{$transaction.Response.StatusCode}}" class="rd-vertical-tabs-content {{if eq $transactionN 0}}show{{end}}">
-                            <div class="rd-content-block first">
-                                <h3 class="rd-content-block-head">Status {{$transaction.Response.StatusCode}}</h3>
-                                <p>{{$transaction.Response.Description}}</p>
+                            <div data-rd-identifier="{{$transaction.Response.StatusCode}}" class="rd-vertical-tabs-content {{if eq $transactionN 0}}show{{end}}">
+                                <div class="rd-content-block first">
+                                    <h3 class="rd-content-block-head">Status {{$transaction.Response.StatusCode}}</h3>
+                                    <p>{{$transaction.Response.Description}}</p>
 
-                                {{if $transaction.Response.Body -}}
-                                    {{range $transaction.Response.Body -}}
-                                        <div data-rd-multi-selection="wrapper">
-                                            <h4 class="rd-content-block-head-sub">Body</h4>
-                                            <p data-rd-multi-selection="items-group" data-rd-selected="json">
-                                                <a href="#" data-rd-multi-selection="item" data-rd-value="json"
-                                                   class="rd-info-label rd-active">{{.MediaType}}</a>
-                                            </p>
-                                            {{if .CustomType -}}
-                                                {{template "custom_type" .CustomType}}
-                                            {{else}}
-                                                {{$customType := .Type|CustomTypeByName}}
-                                                {{if $customType -}}
-                                                    {{template "custom_type" $customType}}
+                                    {{if $transaction.Response.Body -}}
+                                        {{range $transaction.Response.Body -}}
+                                            <div data-rd-multi-selection="wrapper">
+                                                <h4 class="rd-content-block-head-sub">Body</h4>
+                                                <p data-rd-multi-selection="items-group" data-rd-selected="json">
+                                                    <a href="#" data-rd-multi-selection="item" data-rd-value="json"
+                                                       class="rd-info-label rd-active">{{.MediaType}}</a>
+                                                </p>
+                                                {{if .CustomType -}}
+                                                    {{template "custom_type" .CustomType}}
+                                                {{else}}
+                                                    {{$customType := .Type|CustomTypeByName}}
+                                                    {{if $customType -}}
+                                                        {{template "custom_type" $customType}}
+                                                    {{- end}}
                                                 {{- end}}
-                                            {{- end}}
-                                        </div>
+                                            </div>
+                                        {{- end}}
                                     {{- end}}
-                                {{- end}}
+                                </div>
                             </div>
-                        </div>
-                    {{- end}}
+                        {{- end}}
+                    </div>
                 </div>
-            </div>
+            {{end}}
         </div>
     {{- end}}
 {{- end}}

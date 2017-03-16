@@ -255,6 +255,7 @@ func assertResources(t *testing.T) {
 			Resources: []definition.Resource{
 				{
 					Href: definition.Href{
+						FullPath:   "/v1",
 						Path:       "/v1",
 						Parameters: nil,
 					},
@@ -264,6 +265,7 @@ func assertResources(t *testing.T) {
 					Resources: []definition.Resource{
 						{
 							Href: definition.Href{
+								FullPath:   "/v1/first",
 								Path:       "/first",
 								Parameters: nil,
 							},
@@ -273,6 +275,7 @@ func assertResources(t *testing.T) {
 							Resources: []definition.Resource{
 								{
 									Href: definition.Href{
+										FullPath:   "/v1/first/example",
 										Path:       "/example",
 										Parameters: nil,
 									},
@@ -362,6 +365,7 @@ func assertResources(t *testing.T) {
 						},
 						{
 							Href: definition.Href{
+								FullPath:   "/v1/second",
 								Path:       "/second",
 								Parameters: nil,
 							},
@@ -371,6 +375,7 @@ func assertResources(t *testing.T) {
 							Resources: []definition.Resource{
 								{
 									Href: definition.Href{
+										FullPath:   "/v1/second/example",
 										Path:       "/example",
 										Parameters: nil,
 									},
@@ -454,6 +459,7 @@ func assertResources(t *testing.T) {
 				},
 				{
 					Href: definition.Href{
+						FullPath:   "/v2",
 						Path:       "/v2",
 						Parameters: nil,
 					},
@@ -463,6 +469,7 @@ func assertResources(t *testing.T) {
 					Resources: []definition.Resource{
 						{
 							Href: definition.Href{
+								FullPath:   "/v2/first",
 								Path:       "/first",
 								Parameters: nil,
 							},
@@ -472,6 +479,7 @@ func assertResources(t *testing.T) {
 							Resources: []definition.Resource{
 								{
 									Href: definition.Href{
+										FullPath:   "/v2/first/example",
 										Path:       "/example",
 										Parameters: nil,
 									},
