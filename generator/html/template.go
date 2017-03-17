@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"strconv"
+
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 )
 
@@ -51,6 +53,11 @@ func helpers(data definition.Api) template.FuncMap {
 	return template.FuncMap{
 		"Comment": func(t string) template.HTML {
 			return template.HTML(t)
+		},
+		// It returns the class of the http status code
+		"StatusCodeClass": func(c int) string {
+			s := strconv.Itoa(c)
+			return s[0:1]
 		},
 		"Lower": strings.ToLower,
 		"Add": func(a int, b int) int {

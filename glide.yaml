@@ -11,10 +11,6 @@ import:
 - package: github.com/pkg/errors
   version: ^0.8.0
 testImport:
-- package: go4.org
-  subpackages:
-  - reflectutil
-- package: github.com/bradfitz/slice
 - package: github.com/stretchr/testify
   subpackages:
   - assert
