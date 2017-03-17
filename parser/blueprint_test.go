@@ -93,9 +93,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Description: "Returns a specific Post.",
 					Transactions: []definition.Transaction{
 						{
-							Request: definition.Request{
-								Method: "GET",
-							},
 							Response: definition.Response{
 								StatusCode: 200,
 								Headers: []definition.Header{
@@ -119,9 +116,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Description: "Delete a Post. The current user must be the same user who created the Post. It\nreturns the deleted Post on success.",
 					Transactions: []definition.Transaction{
 						{
-							Request: definition.Request{
-								Method: "DELETE",
-							},
 							Response: definition.Response{
 								StatusCode: 204,
 							},
@@ -143,7 +137,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Transactions: []definition.Transaction{
 						{
 							Request: definition.Request{
-								Method: "POST",
 								Body: []definition.Body{
 									{
 										MediaType: "application/json",
@@ -180,9 +173,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Description: "Retrieves all posts.",
 					Transactions: []definition.Transaction{
 						{
-							Request: definition.Request{
-								Method: "GET",
-							},
 							Response: definition.Response{
 								StatusCode: 200,
 								Headers: []definition.Header{
@@ -224,9 +214,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Description: "Save a given Post to the current User’s stars. This is just a “save” action,\nnot a sharing action.\n\n*Note: A repost cannot be starred. Please star the parent Post.*",
 					Transactions: []definition.Transaction{
 						{
-							Request: definition.Request{
-								Method: "POST",
-							},
 							Response: definition.Response{
 								StatusCode:  200,
 								Description: "",
@@ -251,9 +238,6 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 					Description: "Remove a Star from a Post.",
 					Transactions: []definition.Transaction{
 						{
-							Request: definition.Request{
-								Method: "DELETE",
-							},
 							Response: definition.Response{
 								StatusCode: 204,
 							},

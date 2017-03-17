@@ -52,8 +52,13 @@ func helpers(data definition.Api) template.FuncMap {
 		"Comment": func(t string) template.HTML {
 			return template.HTML(t)
 		},
-		"Lower":            strings.ToLower,
-		"CustomTypeByName": data.CustomTypeByName,
+		"Lower": strings.ToLower,
+		"Add": func(a int, b int) int {
+			return a + b
+		},
+		"CustomTypeByName": func(name string) definition.CustomType {
+			return data.CustomTypeByName(definition.CleanCustomTypeName(name))
+		},
 	}
 }
 

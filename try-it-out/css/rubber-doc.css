@@ -276,6 +276,9 @@
 .rubber-doc .rd-definition-term {
   margin-bottom: 16px;
 }
+.rubber-doc .rd-definition-term .rd-definition-term {
+  padding-left: 24px;
+}
 .rubber-doc .rd-definition-term h4 {
   margin: 0 0 8px 0;
   padding: 0 0 4px 0;

@@ -116,7 +116,6 @@ func assertTraits(t *testing.T) {
 					Request: definition.Request{
 						Title:       "",
 						Description: "",
-						Method:      "",
 						Body:        nil,
 						Headers: []definition.Header{
 							{
@@ -124,7 +123,6 @@ func assertTraits(t *testing.T) {
 								Example: "Bearer czZCaGRSa3F0MzpnWDFmQmF0M2JW",
 							},
 						},
-						ContentType: "",
 					},
 				},
 			},
@@ -167,7 +165,6 @@ func assertSecuritySchemes(t *testing.T) {
 					Request: definition.Request{
 						Title:       "",
 						Description: "",
-						Method:      "",
 						Body:        nil,
 						Headers: []definition.Header{
 							{
@@ -175,7 +172,6 @@ func assertSecuritySchemes(t *testing.T) {
 								Description: "Used to send a valid OAuth 2 access token.",
 							},
 						},
-						ContentType: "",
 					},
 					Response: definition.Response{
 						StatusCode:  401,
@@ -334,7 +330,6 @@ func assertResources(t *testing.T) {
 													Request: definition.Request{
 														Title:       "",
 														Description: "",
-														Method:      "GET",
 														Body:        nil,
 														Headers: []definition.Header{
 															{
@@ -343,7 +338,6 @@ func assertResources(t *testing.T) {
 																Example:     nil,
 															},
 														},
-														ContentType: "",
 													},
 													Response: definition.Response{
 														StatusCode:  200,
@@ -426,7 +420,6 @@ func assertResources(t *testing.T) {
 													Request: definition.Request{
 														Title:       "",
 														Description: "",
-														Method:      "GET",
 														Body:        nil,
 														Headers: []definition.Header{
 															{
@@ -435,7 +428,6 @@ func assertResources(t *testing.T) {
 																Example:     nil,
 															},
 														},
-														ContentType: "",
 													},
 													Response: definition.Response{
 														StatusCode:  200,
@@ -537,7 +529,6 @@ func assertResources(t *testing.T) {
 													Request: definition.Request{
 														Title:       "",
 														Description: "",
-														Method:      "GET",
 														Body:        nil,
 														Headers: []definition.Header{
 															{
@@ -546,7 +537,6 @@ func assertResources(t *testing.T) {
 																Example:     nil,
 															},
 														},
-														ContentType: "",
 													},
 													Response: definition.Response{
 														StatusCode:  200,
