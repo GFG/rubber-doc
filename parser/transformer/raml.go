@@ -3,6 +3,7 @@ package transformer
 import (
 	"errors"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -149,7 +150,16 @@ func (tra *RamlTransformer) handleOptions(ramlOpts []raml.DefinitionChoice) (opt
 
 // handleParameters Generic method which handles raml's parameter definition.
 func (tra *RamlTransformer) handleParameters(ramlParams map[string]raml.NamedParameter) (params []definition.Parameter) {
-	for name, ramlParam := range ramlParams {
+	var sortedRamlParams []string
+	for k := range ramlParams {
+		sortedRamlParams = append(sortedRamlParams, k)
+	}
+
+	sort.Strings(sortedRamlParams)
+
+	for _, name := range sortedRamlParams {
+		ramlParam := ramlParams[name]
+
 		param := new(definition.Parameter)
 
 		// It takes the parameter name over the parameter key from raml definition
@@ -179,11 +189,19 @@ func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.H
 		return
 	}
 
-	for name, ramlHead := range ramlHeaders {
+	var sortedRamlHeaders []string
+	for k := range ramlHeaders {
+		sortedRamlHeaders = append(sortedRamlHeaders, string(k))
+	}
+
+	sort.Strings(sortedRamlHeaders)
+
+	for _, name := range sortedRamlHeaders {
+		ramlHead := ramlHeaders[raml.HTTPHeader(name)]
 		header := new(definition.Header)
 
 		// It takes the parameter name over the parameter key from raml definition
-		if header.Name = string(name); ramlHead.Name != "" {
+		if header.Name = name; ramlHead.Name != "" {
 			header.Name = ramlHead.Name
 		}
 
@@ -198,7 +216,15 @@ func (tra *RamlTransformer) handleHeaders(ramlHeaders map[raml.HTTPHeader]raml.H
 
 // handleTypes Generic method which handles raml's type definition.
 func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customTypes []definition.CustomType) {
-	for name, ramlType := range ramlTypes {
+	var sortedRamlTypes []string
+	for k := range ramlTypes {
+		sortedRamlTypes = append(sortedRamlTypes, string(k))
+	}
+
+	sort.Strings(sortedRamlTypes)
+
+	for _, name := range sortedRamlTypes {
+		ramlType := ramlTypes[name]
 		customType := &definition.CustomType{
 			Name:        name,
 			Description: ramlType.Description,
@@ -235,7 +261,16 @@ func (tra *RamlTransformer) handleTypes(ramlTypes map[string]raml.Type) (customT
 
 // handleTraits Generic method which handles raml's trait definition.
 func (tra *RamlTransformer) handleTraits(ramlTraits map[string]raml.Trait) (traits []definition.Trait) {
-	for _, ramlTrait := range ramlTraits {
+	var sortedRamlTraits []string
+	for k := range ramlTraits {
+		sortedRamlTraits = append(sortedRamlTraits, string(k))
+	}
+
+	sort.Strings(sortedRamlTraits)
+
+	for _, name := range sortedRamlTraits {
+		ramlTrait := ramlTraits[name]
+
 		trait := definition.Trait{
 			Name:        ramlTrait.Name,
 			Usage:       ramlTrait.Usage,
@@ -256,21 +291,36 @@ func (tra *RamlTransformer) handleTraits(ramlTraits map[string]raml.Trait) (trai
 
 // handleSecuritySchemes Generic method which handles raml's security schemes definition.
 func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.SecurityScheme) (schemes []definition.SecurityScheme) {
-	for ramlSchemeName, ramlScheme := range ramlSchemes {
+	var sortedRamlSchemes []string
+	for k := range ramlSchemes {
+		sortedRamlSchemes = append(sortedRamlSchemes, string(k))
+	}
+
+	sort.Strings(sortedRamlSchemes)
+
+	for _, name := range sortedRamlSchemes {
+		ramlScheme := ramlSchemes[name]
 		scheme := new(definition.SecurityScheme)
 
 		// It takes the parameter name over the parameter key from raml definition
-		if scheme.Name = ramlSchemeName; ramlScheme.DisplayName != "" {
+		if scheme.Name = name; ramlScheme.DisplayName != "" {
 			scheme.Name = ramlScheme.DisplayName
 		}
 
 		scheme.Type = ramlScheme.Type
 		scheme.Description = ramlScheme.Description
 
-		for name, ramlSet := range ramlScheme.Settings {
+		var sortedRamlSchemesSets []string
+		for k := range ramlScheme.Settings {
+			sortedRamlSchemesSets = append(sortedRamlSchemesSets, string(k))
+		}
+
+		sort.Strings(sortedRamlSchemesSets)
+
+		for _, k := range sortedRamlSchemesSets {
 			scheme.Settings = append(scheme.Settings, definition.SecuritySchemeSetting{
-				Name: name,
-				Data: ramlSet,
+				Name: k,
+				Data: ramlScheme.Settings[k],
 			})
 		}
 
@@ -284,24 +334,36 @@ func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.Se
 
 // handleResources Generic method which handles raml's resources definition.
 func (tra *RamlTransformer) handleResources(ramlResources interface{}, parent *definition.Resource) (resources []definition.Resource, err error) {
-	switch r := ramlResources.(type) {
+	switch rs := ramlResources.(type) {
 	case map[string]raml.Resource:
-		for _, ramlRes := range r {
-			res := tra.handleResource(ramlRes, parent)
+		var sortedRs []string
+		for k := range rs {
+			sortedRs = append(sortedRs, k)
+		}
 
-			if ramlRes.Nested != nil {
-				if res.Resources, err = tra.handleResources(ramlRes.Nested, &res); err != nil {
+		sort.Strings(sortedRs)
+
+		for _, uri := range sortedRs {
+			res := tra.handleResource(rs[uri], parent)
+			if rs[uri].Nested != nil {
+				if res.Resources, err = tra.handleResources(rs[uri].Nested, &res); err != nil {
 					return
 				}
 			}
-
 			resources = append(resources, res)
 		}
 	case map[string]*raml.Resource:
-		for _, ramlRes := range r {
-			res := tra.handleResource(*ramlRes, parent)
-			if ramlRes.Nested != nil {
-				if res.Resources, err = tra.handleResources(ramlRes.Nested, &res); err != nil {
+		var sortedRs []string
+		for k := range rs {
+			sortedRs = append(sortedRs, k)
+		}
+
+		sort.Strings(sortedRs)
+
+		for _, uri := range sortedRs {
+			res := tra.handleResource(*rs[uri], parent)
+			if rs[uri].Nested != nil {
+				if res.Resources, err = tra.handleResources(rs[uri].Nested, &res); err != nil {
 					return
 				}
 			}
@@ -369,10 +431,10 @@ func (tra *RamlTransformer) handleRequest(headers map[raml.HTTPHeader]raml.Heade
 }
 
 // handleResponse It creates an API's response based on RAML's response
-func (tra *RamlTransformer) handleResponse(code raml.HTTPCode, ramlResp raml.Response) (resp *definition.Response) {
+func (tra *RamlTransformer) handleResponse(code string, ramlResp raml.Response) (resp *definition.Response) {
 	resp = new(definition.Response)
 
-	resp.StatusCode, _ = strconv.Atoi(string(code))
+	resp.StatusCode, _ = strconv.Atoi(code)
 	resp.Description = ramlResp.Description
 	resp.Headers = tra.handleHeaders(ramlResp.Headers)
 	resp.Body = tra.handleBodies(&ramlResp.Bodies)
@@ -429,7 +491,15 @@ func (tra *RamlTransformer) handleBodies(ramlBodies *raml.Bodies) (bodies []defi
 
 // handleCustomTypeProperties It transforms RAML's custom properties into an API's array of definition.property
 func (tra *RamlTransformer) handleCustomTypeProperties(properties map[string]interface{}) (props []definition.CustomTypeProperty) {
-	for name, p := range properties {
+	var sortedProps []string
+	for k := range properties {
+		sortedProps = append(sortedProps, k)
+	}
+
+	sort.Strings(sortedProps)
+
+	for _, k := range sortedProps {
+		p := properties[k]
 		// convert from map of interface to property
 		mapToProperty := func(val map[interface{}]interface{}) definition.CustomTypeProperty {
 			var p definition.CustomTypeProperty
@@ -471,7 +541,7 @@ func (tra *RamlTransformer) handleCustomTypeProperties(properties map[string]int
 			prop.Type = "string"
 		}
 
-		prop.Name = name
+		prop.Name = k
 
 		// if has "?" suffix, remove the "?" and set required=false
 		if strings.HasSuffix(prop.Name, "?") {
@@ -490,7 +560,16 @@ func (tra *RamlTransformer) buildTransactions(headers map[raml.HTTPHeader]raml.H
 	req := tra.handleRequest(headers, bodies)
 
 	if len(responses) > 0 {
-		for code, ramlResp := range responses {
+		var sortedResponses []string
+		for k := range responses {
+			sortedResponses = append(sortedResponses, string(k))
+		}
+
+		sort.Strings(sortedResponses)
+
+		for _, code := range sortedResponses {
+			ramlResp := responses[raml.HTTPCode(code)]
+
 			resp := tra.handleResponse(code, ramlResp)
 
 			trans := definition.Transaction{

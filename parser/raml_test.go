@@ -1,10 +1,8 @@
 package parser
 
 import (
-	"sort"
 	"testing"
 
-	"github.com/bradfitz/slice"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/stretchr/testify/assert"
@@ -137,26 +135,6 @@ func assertSecuritySchemes(t *testing.T) {
 
 	expectedSecuritySchemes := []definition.SecurityScheme{
 		{
-			Name:         "OAuth 1.0",
-			Description:  "OAuth 1.0 loaded as Library",
-			Type:         "OAuth 1.0",
-			Transactions: nil,
-			Settings: []definition.SecuritySchemeSetting{
-				{
-					Name: "authorizationUri",
-					Data: "https://example.com/oauth/authorize",
-				},
-				{
-					Name: "requestTokenUri",
-					Data: "https://api.example.com/oauth/request_token",
-				},
-				{
-					Name: "tokenCredentialsUri",
-					Data: "https://api.example.com/oauth/access_token",
-				},
-			},
-		},
-		{
 			Name:        "oauth_2_0",
 			Description: "Custom API supports OAuth 2.0 for authenticating all requests.\n",
 			Type:        "OAuth 2.0",
@@ -204,30 +182,27 @@ func assertSecuritySchemes(t *testing.T) {
 				},
 			},
 		},
+		{
+			Name:         "OAuth 1.0",
+			Description:  "OAuth 1.0 loaded as Library",
+			Type:         "OAuth 1.0",
+			Transactions: nil,
+			Settings: []definition.SecuritySchemeSetting{
+				{
+					Name: "authorizationUri",
+					Data: "https://example.com/oauth/authorize",
+				},
+				{
+					Name: "requestTokenUri",
+					Data: "https://api.example.com/oauth/request_token",
+				},
+				{
+					Name: "tokenCredentialsUri",
+					Data: "https://api.example.com/oauth/access_token",
+				},
+			},
+		},
 	}
-
-	// Due to transformation of map[string]interface into array
-	// we need to sort before comparing structures
-	slice.Sort(apiDef.SecuritySchemes, func(i, j int) bool {
-		isSorted := []string{
-			apiDef.SecuritySchemes[i].Name,
-			apiDef.SecuritySchemes[j].Name,
-		}
-
-		return sort.StringsAreSorted(isSorted)
-	})
-
-	for _, scheme := range apiDef.SecuritySchemes {
-		slice.Sort(scheme.Settings, func(i, j int) bool {
-			isSorted := []string{
-				scheme.Settings[i].Name,
-				scheme.Settings[j].Name,
-			}
-
-			return sort.StringsAreSorted(isSorted)
-		})
-	}
-	// END
 
 	assert.Exactly(t, expectedSecuritySchemes, apiDef.SecuritySchemes)
 }
@@ -572,18 +547,6 @@ func assertResources(t *testing.T) {
 				},
 			},
 		},
-	}
-
-	for _, groups := range apiDef.ResourceGroups {
-		// Due to transformation of map[string]interface into array
-		// we need to sort before comparing structures
-		slice.Sort(groups.Resources, func(i, j int) bool {
-			isSorted := []string{
-				groups.Resources[i].Href.Path,
-				groups.Resources[j].Href.Path,
-			}
-			return sort.StringsAreSorted(isSorted)
-		})
 	}
 
 	assert.Exactly(t, expectedResourcesGroups, apiDef.ResourceGroups)

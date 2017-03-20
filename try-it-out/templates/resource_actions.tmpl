@@ -83,7 +83,7 @@
                         <ul>
 
                             {{range $transactionN, $transaction := $action.Transactions -}}
-                                <li data-rd-tabs="head" data-rd-target="{{$transaction.Response.StatusCode}}"><a href="#" class="rd-btn-2xx">{{$transaction.Response.StatusCode}}</a></li>
+                                <li data-rd-tabs="head" data-rd-target="{{$transaction.Response.StatusCode}}"><a href="#" class="rd-btn-{{$transaction.Response.StatusCode|StatusCodeClass}}xx">{{$transaction.Response.StatusCode}}</a></li>
                             {{- end}}
                         </ul>
                     </div>

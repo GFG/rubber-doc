@@ -1,5 +1,5 @@
-hash: 91073afc17433e054092252de2525374513e87fbb03e8a96c096f4db54793b4f
-updated: 2017-03-03T11:03:54.525781588+01:00
+hash: 4251f8cdf85f62713fffb19eae62a5eef39727ec63f3ea874973f86ee070874e
+updated: 2017-03-17T11:49:55.044450237+01:00
 imports:
 - name: bitbucket.org/pkg/inflect
   version: 8961c3750a47b8c0b3e118d52513b97adf85a7e8
@@ -21,7 +21,7 @@ imports:
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/Sirupsen/logrus
-  version: 0208149b40d863d2c1a2f8fe5753096a9cf2cc8b
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/urfave/cli
   version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: golang.org/x/sys
@@ -29,8 +29,6 @@ imports:
   subpackages:
   - unix
 testImports:
-- name: github.com/bradfitz/slice
-  version: d9036e2120b5ddfa53f3ebccd618c4af275f47da
 - name: github.com/davecgh/go-spew
   version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
   subpackages:
@@ -43,7 +41,3 @@ testImports:
   version: 4d4bfba8f1d1027c4fdbe371823030df51419987
   subpackages:
   - assert
-- name: go4.org
-  version: 7ce08ca145dbe0e66a127c447b80ee7914f3e4f9
-  subpackages:
-  - reflectutil
