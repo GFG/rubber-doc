@@ -1,12 +1,12 @@
 package transformer
 
 import (
+	"errors"
+	"fmt"
 	"strconv"
-
 	"strings"
 
 	"github.com/Jumpscale/go-raml/raml"
-	"github.com/pkg/errors"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 )
 
@@ -34,9 +34,10 @@ func (tra *RamlTransformer) Transform(data interface{}) (def *definition.Api, er
 	tra.customTypes(ramlDef, def)
 	tra.securitySchemes(ramlDef, def)
 	tra.securedBy(ramlDef, def)
-	err = tra.resourceGroups(ramlDef, def)
 	tra.traits(ramlDef.Traits, def)
 	tra.libraries(ramlDef.Libraries, def)
+
+	err = tra.resourceGroups(ramlDef, def)
 
 	return
 }
@@ -91,7 +92,7 @@ func (tra *RamlTransformer) securedBy(ramlDef raml.APIDefinition, def *definitio
 // resourceGroups Groups all the raml's resources definition
 func (tra *RamlTransformer) resourceGroups(ramlDef raml.APIDefinition, def *definition.Api) (err error) {
 	var resources []definition.Resource
-	if resources, err = tra.handleResources(ramlDef.Resources); err == nil {
+	if resources, err = tra.handleResources(ramlDef.Resources, new(definition.Resource)); err == nil {
 		if len(resources) > 0 {
 			//ResourceGroups is an aggregator of resources that is being used by the api definition but not yet supported by RAML.
 			def.ResourceGroups = append(def.ResourceGroups, definition.ResourceGroup{Resources: resources})
@@ -282,14 +283,14 @@ func (tra *RamlTransformer) handleSecuritySchemes(ramlSchemes map[string]raml.Se
 }
 
 // handleResources Generic method which handles raml's resources definition.
-func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resources []definition.Resource, err error) {
+func (tra *RamlTransformer) handleResources(ramlResources interface{}, parent *definition.Resource) (resources []definition.Resource, err error) {
 	switch r := ramlResources.(type) {
 	case map[string]raml.Resource:
 		for _, ramlRes := range r {
-			res := tra.handleResource(ramlRes)
+			res := tra.handleResource(ramlRes, parent)
 
 			if ramlRes.Nested != nil {
-				if res.Resources, err = tra.handleResources(ramlRes.Nested); err != nil {
+				if res.Resources, err = tra.handleResources(ramlRes.Nested, &res); err != nil {
 					return
 				}
 			}
@@ -298,9 +299,9 @@ func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resource
 		}
 	case map[string]*raml.Resource:
 		for _, ramlRes := range r {
-			res := tra.handleResource(*ramlRes)
+			res := tra.handleResource(*ramlRes, parent)
 			if ramlRes.Nested != nil {
-				if res.Resources, err = tra.handleResources(ramlRes.Nested); err != nil {
+				if res.Resources, err = tra.handleResources(ramlRes.Nested, &res); err != nil {
 					return
 				}
 			}
@@ -313,11 +314,12 @@ func (tra *RamlTransformer) handleResources(ramlResources interface{}) (resource
 }
 
 // handleResource Generic method which handles raml's resource definition.
-func (tra *RamlTransformer) handleResource(ramlRes raml.Resource) definition.Resource {
+func (tra *RamlTransformer) handleResource(ramlRes raml.Resource, parent *definition.Resource) definition.Resource {
 	return definition.Resource{
 		Title:       ramlRes.DisplayName,
 		Description: ramlRes.Description,
 		Href: definition.Href{
+			FullPath:   fmt.Sprintf("%s%s", parent.Href.FullPath, ramlRes.URI),
 			Path:       ramlRes.URI,
 			Parameters: tra.handleParameters(ramlRes.URIParameters),
 		},

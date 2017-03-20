@@ -54,7 +54,7 @@ func TestRamlTransformer_Transform_CustomTypes(t *testing.T) {
 			},
 		},
 		{
-			"CustomType's Properties",
+			"CustomType Properties",
 			raml.APIDefinition{
 				Types: map[string]raml.Type{
 					"Example": {
@@ -148,6 +148,67 @@ func TestRamlTransformer_Transform_CustomTypes(t *testing.T) {
 
 			if assert.Nil(t, err) {
 				assert.Exactly(t, check.Expected.CustomTypes, def.CustomTypes)
+			}
+		})
+	}
+}
+
+func TestRamlTransformer_Transform_Resources(t *testing.T) {
+	t.Parallel()
+
+	checks := []struct {
+		Name     string
+		Spec     raml.APIDefinition
+		Expected *definition.Api
+	}{
+		{
+			"Resource FullPath",
+			raml.APIDefinition{
+				Resources: map[string]raml.Resource{
+					"/first": {
+						URI: "/first",
+						Nested: map[string]*raml.Resource{
+							"/second": {
+								URI: "/second",
+							},
+						},
+					},
+				},
+			},
+			&definition.Api{
+				ResourceGroups: []definition.ResourceGroup{
+					{
+						Resources: []definition.Resource{
+							{
+								Href: definition.Href{
+									FullPath: "/first",
+									Path:     "/first",
+								},
+								Resources: []definition.Resource{
+									{
+										Href: definition.Href{
+											FullPath: "/first/second",
+											Path:     "/second",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, check := range checks {
+		check := check
+		t.Run(check.Name, func(t *testing.T) {
+			t.Parallel()
+
+			def, err := NewRamlTransformer().Transform(check.Spec)
+
+			if assert.Nil(t, err) {
+				assert.Exactly(t, check.Expected.ResourceGroups, def.ResourceGroups)
 			}
 		})
 	}

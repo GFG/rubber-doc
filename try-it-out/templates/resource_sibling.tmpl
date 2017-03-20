@@ -1,7 +1,7 @@
 {{define "resourceSibling" -}}
     <li class="rd-collapsible" data-rd-tabs="wrapper">
         <div class="rd-collapsible-head">
-            <span class="rd-light">{{.Href.Path}}</span>
+            <span class="rd-light">{{TrimSuffix .Href.FullPath .Href.Path}}</span>{{.Href.Path}}
             {{if .Actions}}
                 <ul class="rd-nested-tabs-nav">
                     {{range .Actions -}}

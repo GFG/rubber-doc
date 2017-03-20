@@ -56,6 +56,9 @@ func helpers(data definition.Api) template.FuncMap {
 		"Add": func(a int, b int) int {
 			return a + b
 		},
+		"TrimSuffix": func(s string, cutset string) string {
+			return strings.TrimSuffix(s, cutset)
+		},
 		"CustomTypeByName": func(name string) definition.CustomType {
 			return data.CustomTypeByName(definition.CleanCustomTypeName(name))
 		},
