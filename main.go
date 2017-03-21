@@ -14,9 +14,10 @@ func main() {
 	logger := logrus.New()
 
 	app := cli.NewApp()
-	app.Name = "Rubber Doc - A documentation generator for RAML and Blueprint"
-	app.Version = "0.1.0-Dev"
-	app.Description = "Documentation's generator for RAML and Blueprint."
+	app.Name = "RubberDoc"
+	app.Version = "v0.1-alpha"
+	app.Description = "A documentation generator for RAML and Blueprint."
+	app.Usage = ""
 
 	var debugLogging bool
 	app.Flags = []cli.Flag{

@@ -1,4 +1,6 @@
 EXTENSION_DIR ?= ./ext
+PACKAGE_NAME = rubberdoc
+BINARY_DEST = $(GOPATH)/bin/$(PACKAGE_NAME)
 
 all: install
 
@@ -24,7 +26,7 @@ glide-install:
 
 .PHONY: go-test
 go-test:
-	go test $(shell glide novendor) -v && go test $(shell glide novendor) -v ./...
+	go test $(shell glide novendor) -v
 
 .PHONY: go-gen
 go-gen:
@@ -32,17 +34,17 @@ go-gen:
 
 .PHONY: go-build
 go-build:
-	go build -o rubberdoc .
+	go build -o $(BINARY_DEST) .
 
 .PHONY: go-install
 go-install:
-	go install ./...
+	go build -i -o $(BINARY_DEST) .
 
 .PHONY: clean
 clean:
-	$(RM) rubberdoc
+	$(RM) $(BINARY_DEST)
 
 dep: submodules drafter glide glide-install
-build: dep go-gen go-build
-install: dep go-gen go-install
+build: clean dep go-gen go-build
+install: clean dep go-gen go-install
 test: dep go-gen go-test

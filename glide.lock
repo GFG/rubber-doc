@@ -1,5 +1,5 @@
 hash: 4251f8cdf85f62713fffb19eae62a5eef39727ec63f3ea874973f86ee070874e
-updated: 2017-03-17T11:49:55.044450237+01:00
+updated: 2017-03-21T10:01:08.518232607+01:00
 imports:
 - name: bitbucket.org/pkg/inflect
   version: 8961c3750a47b8c0b3e118d52513b97adf85a7e8

@@ -1,23 +1,56 @@
-# RocketLabsRubberDoc
+# RubberDoc
+A documentation generator for RAML and Blueprint
 
-## How to get started
- - clone repository
- - make install
- - go run main.go help
+## Installation
 
-## Configuration
+The latest executables for supported platforms are available from the [release page](https://github.com/rocket-internet-berlin/RocketLabsRubberDoc/releases).
+
+Just extract and start using it:
+
+```
+$ wget https://github.com/rocket-internet-berlin/RocketLabsRubberDoc/releases/download/${version}/rubberdoc-${version}.${os}-${arch}.tar.gz
+$ tar -zxvf rubberdoc-${version}.${os}-${arch}.tar.gz
+$ ./rubberdoc -h
+```
+### Manual
+
+```sh
+$ git clone https://github.com/rocket-internet-berlin/RocketLabsRubberDoc.git
+$ cd RocketLabsRubberDoc
+$ make install
+```
+
+> Note: Ensure you have installed [Go](https://golang.org/doc/install#tarball) and configured your `GOPATH` and `PATH`.
+
+### Generate HTML Documentation
+
+To generate HTML documentation from a RAML's specification:
+
+```
+$ rubberdoc generate --spec=API.raml --config=config.yml
+```
+
+To generate HTML documentation from a Blueprint's specification:
+
+```
+$ rubberdoc generate --spec=API.apib --config=config.yml
+```
+
+> Note: Check [Configuration](#configuration) section to how to build your config.yml file.
+
+#### Configuration
 The configuration is used to provide to the generator the location os the templates and how the will be generate and also the output's destination.
 
-#### Global
+##### Global
 | Property  | Description |
 |:----------|:----------|
 | combined | The option is a flag (true or false) and allows you to decide if the output will be combined in one file or will be located in different files defined on the Templates configuration.
-| srcDir | Defines the location of the templates.
-| dstDir | Defines the output directory.
+| srcDir | Defines the location of the templates. If a relative path is given then the absolute path will be resolved using the config's file absolute's path.
+| dstDir | Defines the output directory. If a relative path is given then the absolute path will be resolved using the config's file absolute's path.
 | output | Destination of the combined output. In case the combined property is true, this property should be set.
 | templates | Configuration for each template. See section Templates below.
 
-#### Templates
+##### Templates
 | Property  | Description |
 |:----------|:----------|
 | src | Template's location.
@@ -54,10 +87,45 @@ templates:
   -
     src: "mediaTypes.tmpl"
 ```
+To see how the configuration looks like, you can see it for the `try-it-out` located in [try-it-out/templates/config.yaml](try-it-out/templates/config.yaml).
 
-## Run examples
-### From Blueprint
- - go run main.go generate --spec=./examples/spec/blueprint/simple.apib --config=./examples/html/config.yaml
+## Help
 
-### From RAML
- - go run main.go generate --spec=./examples/spec/raml/simple.raml --config=./examples/html/config.yaml
+As usual, you can also see all supported flags by passing `-h`:
+
+```
+NAME:
+   RubberDoc - A documentation generator for RAML and Blueprint
+
+USAGE:
+   rubberdoc [global options] command [command options] [arguments...]
+
+VERSION:
+   v0.1-alpha
+
+DESCRIPTION:
+   Documentation's generator for RAML and Blueprint.
+
+COMMANDS:
+     generate  This command receives a configuration file and a specification file written in RAML or Blueprint.
+     help, h   Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --debug, -d    Enable debug logging
+   --help, -h     show help
+   --version, -v  print the version
+```
+
+## Examples
+
+Using RAML's specification:
+
+```
+$ rubberdoc generate --spec=examples/spec/raml/simple.raml --config=try-it-out/templates/config.yaml
+```
+
+Using Blueprint's specification:
+
+```
+$ rubberdoc generate --spec=examples/spec/blueprint/simple.apib --config=try-it-out/templates/config.yaml
+```
