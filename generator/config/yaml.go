@@ -3,6 +3,8 @@ package config
 import (
 	"io/ioutil"
 
+	"path/filepath"
+
 	"github.com/gigforks/yaml"
 	"github.com/pkg/errors"
 )
@@ -35,6 +37,10 @@ func FromYaml(filename string) (cfg Config, err error) {
 		return
 	}
 
+	if err = y.applyAbsToDirectories(filename); err != nil {
+		return
+	}
+
 	cfg = NewConfig(y.Combine, y.SrcDir, y.DstDir, y.OutputFilename, y.templates())
 
 	return
@@ -45,5 +51,22 @@ func (y YAML) templates() (config []TemplateConfig) {
 	for _, tmpl := range y.TemplateFiles {
 		config = append(config, NewTemplateConfig(tmpl.SrcFilename, tmpl.DstFilename))
 	}
+	return
+}
+
+// applyAbsToDirectories Applies the absolute path of the config's file to source/destination directories
+func (y *YAML) applyAbsToDirectories(filename string) (err error) {
+	var abs string
+
+	// Fetch absolute path of the configuration file
+	if abs, err = filepath.Abs(filepath.Dir(filename)); err != nil {
+		return
+	}
+
+	// Adds the absolute path to the source directory
+	y.SrcDir = filepath.Join(abs, y.SrcDir)
+	// Adds the absolute path to the destination directory
+	y.DstDir = filepath.Join(abs, y.DstDir)
+
 	return
 }

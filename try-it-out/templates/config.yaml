@@ -1,6 +1,6 @@
 combined: true
-srcDir: "try-it-out/templates"
-dstDir: "try-it-out"
+srcDir: "./"
+dstDir: "../"
 output: "index.html"
 templates:
   -
