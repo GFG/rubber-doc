@@ -4,9 +4,8 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
-	"strings"
-
 	"strconv"
+	"strings"
 
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 )
@@ -51,7 +50,7 @@ func (t *Template) Execute() (err error) {
 // helpers Returns the helpers given to the templates
 func helpers(data definition.Api) template.FuncMap {
 	return template.FuncMap{
-		"Comment": func(t string) template.HTML {
+		"NoEscape": func(t string) template.HTML {
 			return template.HTML(t)
 		},
 		// It returns the class of the http status code
