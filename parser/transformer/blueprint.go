@@ -83,19 +83,24 @@ func (f *BlueprintTransformer) resourceAction(el *walker.ObjectWalker, r *defini
 	children := filterContentByElement("transition", el)
 
 	for _, child := range children {
+		transactions, method := f.transactions(child)
+
 		t := &definition.ResourceAction{
-			Title:       child.Path("meta.title").String(),
-			Description: f.handleDescription(child),
-			Href:        f.handleHref(child),
+			Title:        child.Path("meta.title").String(),
+			Description:  f.handleDescription(child),
+			Href:         f.handleHref(child),
+			Transactions: transactions,
+			Method:       method,
 		}
 
-		f.transactions(child, t)
 		r.Actions = append(r.Actions, *t)
 	}
 }
 
-func (f *BlueprintTransformer) transactions(el *walker.ObjectWalker, ra *definition.ResourceAction) {
+func (f *BlueprintTransformer) transactions(el *walker.ObjectWalker) (transactions []definition.Transaction, method string) {
 	children := filterContentByElement("httpTransaction", el)
+
+	var transaction definition.Transaction
 
 	for _, child := range children {
 		cx, err := child.Path("content").Children()
@@ -103,31 +108,36 @@ func (f *BlueprintTransformer) transactions(el *walker.ObjectWalker, ra *definit
 			continue
 		}
 
-		ra.Transactions = append(ra.Transactions, f.transaction(cx))
+		transaction, method = f.transaction(cx)
+
+		transactions = append(transactions, transaction)
 	}
+
+	return
 }
 
-func (f *BlueprintTransformer) transaction(el []*walker.ObjectWalker) definition.Transaction {
-	x := new(definition.Transaction)
+func (f *BlueprintTransformer) transaction(el []*walker.ObjectWalker) (transaction definition.Transaction, method string) {
+	transaction = definition.Transaction{}
 
 	for _, child := range el {
 		if child.Path("element").String() == "httpRequest" {
-			f.request(child, x)
+			method = f.request(child, &transaction)
 		}
 
 		if child.Path("element").String() == "httpResponse" {
-			f.response(child, x)
+			f.response(child, &transaction)
 		}
 	}
 
-	return *x
+	return
 }
 
-func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition.Transaction) {
+func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition.Transaction) (method string) {
 	x.Request.Title = child.Path("meta.title").String()
 	x.Request.Description = f.handleDescription(child)
 	x.Request.Headers = f.handleHeaders(child.Path("attributes.headers"))
 
+	method = child.Path("attributes.method").String()
 	cx, err := child.Path("content").Children()
 	if err != nil {
 		return
@@ -140,6 +150,8 @@ func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition
 			}
 		}
 	}
+
+	return
 }
 
 func (f *BlueprintTransformer) response(child *walker.ObjectWalker, x *definition.Transaction) {
@@ -250,6 +262,7 @@ func (f *BlueprintTransformer) handleHref(child *walker.ObjectWalker) (h definit
 
 	if href.Value().IsValid() {
 		h.Path = href.String()
+		h.FullPath = href.String()
 	}
 
 	contents, err := child.Path("attributes.hrefVariables.content").Children()
