@@ -77,6 +77,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 			Description: "A Post is the other central object utilized by the App.net Stream API. It has\nrich text and annotations which comprise all of the content a users sees in\ntheir feed. Posts are closely tied to the follow graph...",
 			Href: definition.Href{
 				Path: "/stream/0/posts/{post_id}",
+				FullPath: "/stream/0/posts/{post_id}",
 				Parameters: []definition.Parameter{
 					{
 						Required:    true,
@@ -91,6 +92,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 				{
 					Title:       "Retrieve a Post",
 					Description: "Returns a specific Post.",
+					Method: "GET",
 					Transactions: []definition.Transaction{
 						{
 							Response: definition.Response{
@@ -114,6 +116,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 				{
 					Title:       "Delete a Post",
 					Description: "Delete a Post. The current user must be the same user who created the Post. It\nreturns the deleted Post on success.",
+					Method: "DELETE",
 					Transactions: []definition.Transaction{
 						{
 							Response: definition.Response{
@@ -129,11 +132,13 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 			Description: "A Collection of posts.",
 			Href: definition.Href{
 				Path: "/stream/0/posts",
+				FullPath: "/stream/0/posts",
 			},
 			Actions: []definition.ResourceAction{
 				{
 					Title:       "Create a Post",
 					Description: "Create a new Post object. Mentions and hashtags will be parsed out of the post\ntext, as will bare URLs...",
+					Method: "POST",
 					Transactions: []definition.Transaction{
 						{
 							Request: definition.Request{
@@ -171,6 +176,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 				{
 					Title:       "Retrieve all Posts",
 					Description: "Retrieves all posts.",
+					Method: "GET",
 					Transactions: []definition.Transaction{
 						{
 							Response: definition.Response{
@@ -198,6 +204,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 			Description: "A User’s stars are visible to others, but they are not automatically added to\nyour followers’ streams.",
 			Href: definition.Href{
 				Path: "/stream/0/posts/{post_id}/star",
+				FullPath: "/stream/0/posts/{post_id}/star",
 				Parameters: []definition.Parameter{
 					{
 						Required:    true,
@@ -212,6 +219,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 				{
 					Title:       "Star a Post",
 					Description: "Save a given Post to the current User’s stars. This is just a “save” action,\nnot a sharing action.\n\n*Note: A repost cannot be starred. Please star the parent Post.*",
+					Method: "POST",
 					Transactions: []definition.Transaction{
 						{
 							Response: definition.Response{
@@ -236,6 +244,7 @@ func (bp *BlueprintParserTest) expectedResources() []definition.Resource {
 				{
 					Title:       "Unstar a Post",
 					Description: "Remove a Star from a Post.",
+					Method: "DELETE",
 					Transactions: []definition.Transaction{
 						{
 							Response: definition.Response{
