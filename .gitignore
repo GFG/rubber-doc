@@ -1,5 +1,6 @@
 ~*
 vendor
+!try-it-out/vendor
 
 ext/drafter/build/*
 
