@@ -17,7 +17,7 @@ drafter:
 install-glide:
 ifndef GLIDE_VERSION
 	$(shell mkdir -p $(GOBIN))
-	$(shell curl https://glide.sh/get | sh)
+	$(shell curl https://glide.sh/get | sh > /dev/null)
 endif
 
 .PHONY: glide-install
@@ -43,6 +43,7 @@ go-install:
 .PHONY: clean
 clean:
 	$(RM) $(GOBIN)/$(APP_NAME)
+	$(MAKE) -C $(EXTENSION_DIR)/drafter distclean
 
 dep: submodules drafter glide-install
 build: clean dep go-gen go-build
