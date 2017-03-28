@@ -1,6 +1,7 @@
 EXTENSION_DIR ?= ./ext
-PACKAGE_NAME = rubberdoc
-BINARY_DEST = $(GOPATH)/bin/$(PACKAGE_NAME)
+APP_NAME = rubberdoc
+GOBIN = $(GOPATH)/bin
+GLIDE_VERSION := $(shell glide -v 2> /dev/null)
 
 all: install
 
@@ -10,18 +11,17 @@ submodules:
 
 .PHONY: drafter
 drafter:
-	cd $(EXTENSION_DIR)/drafter
 	$(MAKE) -C $(EXTENSION_DIR)/drafter
 
-.PHONY: glide
-glide:
-    exists = $(shell glide -v)
-    ifndef exists
-        $(shell curl https://glide.sh/get | sh)
-    endif
+.PHONY: install-glide
+install-glide:
+ifndef GLIDE_VERSION
+	$(shell mkdir -p $(GOBIN))
+	$(shell curl https://glide.sh/get | sh)
+endif
 
 .PHONY: glide-install
-glide-install:
+glide-install: install-glide
 	$(shell glide install)
 
 .PHONY: go-test
@@ -34,17 +34,17 @@ go-gen:
 
 .PHONY: go-build
 go-build:
-	go build -o $(BINARY_DEST) .
+	go build -o $(GOBIN)/$(APP_NAME) .
 
 .PHONY: go-install
 go-install:
-	go build -i -o $(BINARY_DEST) .
+	go build -i -o $(GOBIN)/$(APP_NAME) .
 
 .PHONY: clean
 clean:
-	$(RM) $(BINARY_DEST)
+	$(RM) $(GOBIN)/$(APP_NAME)
 
-dep: submodules drafter glide glide-install
+dep: submodules drafter glide-install
 build: clean dep go-gen go-build
 install: clean dep go-gen go-install
-test: dep go-gen go-test
+test: clean dep go-gen go-test

@@ -5,16 +5,17 @@ os:
 - linux
 - osx
 before_script:
-- make dep
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install glide; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:masterminds/glide -y
+  && sudo apt-get update; sudo apt-get install -y glide; fi
 script:
-- make go-gen
-- make go-test
+- make test
 before_deploy:
 - ./tools/release.sh
 deploy:
   provider: releases
   api_key:
-    secure: __TRAVIS_TOKEN_PLACEHOLDER__
+    secure: YTK4Il+dflz/cdN3xKKETsfHzXAcuVnrHCu6FNCt2eZk4yrNaOvzDKUoubeLWjOYPi+qWH/v4DKWzd82yJ1MGqig6G8sTYGWnSt/a/8mWAODr5gMJBSq52A0PZ1MA44SF9ImEjBs1WvGGZOOGc4Hw+zBVQA9lVJ53PNLJsGzc5Qf/PDHJb9LdbF2QeHaV0XuzG4+442Y27OThNL4MWfHyKxbLhDnyDlt9pg4SAF5eOuIWDJDPrEpH8Nv8MngAmyLizn1qLK0XbGnxNhV4hSGNTeA9UTvLEZlWoVLlhDrkTsjUSEm4SjQUT/wFIHfMUM4wUPiW1ehSUFA+lKY2DgwAkaF9eJAYs4mGNkX3QaFwV+2aavEAUjIcLBmi9y3RWTBXYJMpclGO0/xlndNeVCgzCwKndZGxUNROC1uMhLduA3Q4RiZY0ua2Zd5Gj0+qgMivkVxcS2wgeex1nVbcisJAyf5SfT+AC2U/FcFS3U7L7aq1wzkulx9y5xV3/six7xifJlMPSD/UOfSQlgC+yCCJ8663fVN6gquAvmMb6XmG/GHT2pVQVs1FsdlPs+o55ohQCGfVO6xUS004+wB5P1FL7obP865B25cJgTqc4hC2sbxYJQDvKxWX83KXlfADQuIKYoj1zwIxoMgBpZfLEdt9vc5aG45+2DU2P/bkrZSfHA=
   file: rubberdoc-$TRAVIS_TAG.${TRAVIS_OS_NAME/osx/darwin}-amd64.tar.gz
   skip_cleanup: true
   on:
