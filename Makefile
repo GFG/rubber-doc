@@ -46,6 +46,6 @@ clean:
 	$(MAKE) -C $(EXTENSION_DIR)/drafter distclean
 
 dep: submodules drafter glide-install
-build: clean dep go-gen go-build
-install: clean dep go-gen go-install
-test: clean dep go-gen go-test
+build: dep go-gen go-build
+install: dep go-gen go-install
+test: dep go-gen go-test

@@ -6,12 +6,12 @@ os:
 - osx
 before_script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install glide; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:masterminds/glide -y
-  && sudo apt-get update; sudo apt-get install -y glide build-essential; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:masterminds/glide
+  -y && sudo apt-get update; sudo apt-get install -y glide; fi
 script:
 - make test
 before_deploy:
-- ./tools/release.sh
+- "./tools/release.sh"
 deploy:
   provider: releases
   api_key:
@@ -20,3 +20,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+notifications:
+  slack:
+    secure: UeUVRh4Asp4PNntbqut6wrTr8eDWBuNQ/bIH1GvEPv6m4Jg2SyuICpiwFMu3C91kLkA9BJeK30EmeFJi4/N1O6QNkWFIDw9ZpE1HXTdOz12fEBQ6AMK1HJZYHh21+of6uetfl/d1XZROcUo2Zw7S8sQAFjIkDE93Y7A5zNkJ4bc48mr7MnMAQRSxvrxjZzudTZGc1eXQqUzIl2by10xp9NcoPGYAZSdx9+hu5t3pw0qUWjYfo8bcgPXFe966DtJyxRRfAaAHmF24q+saegZMxuy12eboaZieGxzx2fqqo0t4V5YLluqalxN6fBGRVyxCuv1nUOctk5QXY6ilWCg7JB/8TXw3SijW0KDGnz+9D2imqxCd/iUFTLO6TnNqYBv2Z4+S7SE40So2hGsru3n3VfgR2t/E+tx9tNhJruhdbKET6/lLimR4tRf2BrDsW6tikzRR2cSxQIwFjSUQgPzVJ4S2x9BwElVEiLuH3bkRGRhoywSL4wTDOLuM3VYCvIg5wJGvF8m4y06Gbt8bEresrvTA2YPU4UD2UDEDoRm28GKamOm2D7e0gejZDBwc+5BlGM/q3bRiD4RmNFPr2OcMiFiAULQByaXUaGLsJY2Ezj9OvKJlXgzP2M8GkuWAujJVkYUfE9zIsFPeXY2Wt6L4n16AWDtFLXdQbQaKbZqUWJc=
