@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-VERSION=v0.1-alpha
-OS=darwin
+VERSION=${TRAVIS_TAG}
+OS=${TRAVIS_OS_NAME/osx/darwin}
 ARCH=amd64
 
 BINARY_NAME=rubberdoc
-BINARY_DST=$(eval echo \$\{GOPATH\})/bin/
+BINARY_DST=$(eval echo \${GOPATH\})/bin/
 
 PACKAGE_NAME=${BINARY_NAME}-${VERSION}.${OS}-${ARCH}.tar.gz
 PACKAGE_DST=.
