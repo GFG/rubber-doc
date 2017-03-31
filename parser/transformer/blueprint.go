@@ -117,25 +117,26 @@ func (f *BlueprintTransformer) transactions(el *walker.ObjectWalker) (transactio
 }
 
 func (f *BlueprintTransformer) transaction(el []*walker.ObjectWalker) (transaction definition.Transaction, method string) {
-	transaction = definition.Transaction{}
 
 	for _, child := range el {
 		if child.Path("element").String() == "httpRequest" {
-			method = f.request(child, &transaction)
+			transaction.Request, method = f.request(child)
 		}
 
 		if child.Path("element").String() == "httpResponse" {
-			f.response(child, &transaction)
+			transaction.Response = f.response(child)
 		}
 	}
+
+
 
 	return
 }
 
-func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition.Transaction) (method string) {
-	x.Request.Title = child.Path("meta.title").String()
-	x.Request.Description = f.handleDescription(child)
-	x.Request.Headers = f.handleHeaders(child.Path("attributes.headers"))
+func (f *BlueprintTransformer) request(child *walker.ObjectWalker) (request definition.Request, method string) {
+	request.Title = child.Path("meta.title").String()
+	request.Description = f.handleDescription(child)
+	request.Headers = f.handleHeaders(child.Path("attributes.headers"))
 
 	method = child.Path("attributes.method").String()
 	cx, err := child.Path("content").Children()
@@ -145,7 +146,7 @@ func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition
 
 	for _, c := range cx {
 		if hasClass("messageBody", c) {
-			x.Request.Body = []definition.Body{
+			request.Body = []definition.Body{
 				f.handleBody(c),
 			}
 		}
@@ -154,16 +155,16 @@ func (f *BlueprintTransformer) request(child *walker.ObjectWalker, x *definition
 	return
 }
 
-func (f *BlueprintTransformer) response(child *walker.ObjectWalker, x *definition.Transaction) {
+func (f *BlueprintTransformer) response(child *walker.ObjectWalker) (response definition.Response) {
 	s := child.Path("attributes.statusCode").String()
 	n, err := strconv.Atoi(s)
 	if err != nil {
 		n = 0
 	}
 
-	x.Response.StatusCode = n
-	x.Response.Headers = f.handleHeaders(child.Path("attributes.headers"))
-	x.Response.Description = f.handleDescription(child)
+	response.StatusCode = n
+	response.Headers = f.handleHeaders(child.Path("attributes.headers"))
+	response.Description = f.handleDescription(child)
 
 	cx, err := child.Path("content").Children()
 	if err != nil {
@@ -172,19 +173,21 @@ func (f *BlueprintTransformer) response(child *walker.ObjectWalker, x *definitio
 
 	for _, c := range cx {
 		if hasClass("messageBody", c) {
-			x.Response.Body = []definition.Body{
+			response.Body = []definition.Body{
 				f.handleBody(c),
 			}
 		}
 
 	}
+
+	return
 }
 
 //Internals methods, handle specific nodes & content retrieval
 
 //Handle the content to start parsing the document elemens
 func (f *BlueprintTransformer) handleContent(el *walker.ObjectWalker) *definition.Api {
-	apiDef := &definition.Api{}
+	apiDef := new(definition.Api)
 
 	children, _ := el.Path("content").Children()
 	for _, child := range children {
@@ -286,7 +289,7 @@ func (f *BlueprintTransformer) handleHref(child *walker.ObjectWalker) (h definit
 }
 
 //Handle body examples, both for response and request
-func (f *BlueprintTransformer) handleBody(child *walker.ObjectWalker) (a definition.Body) {
+func (f *BlueprintTransformer) handleBody(child *walker.ObjectWalker) (body definition.Body) {
 	if child.Path("element").String() == "asset" {
 		ms := map[string]string{
 			`\\n`: `\n`,
@@ -299,7 +302,7 @@ func (f *BlueprintTransformer) handleBody(child *walker.ObjectWalker) (a definit
 			content = strings.Replace(content, key, val, -1)
 		}
 
-		return definition.Body{
+		body = definition.Body{
 			MediaType: definition.MediaType(child.Path("attributes.contentType").String()),
 			Example:   content,
 		}
