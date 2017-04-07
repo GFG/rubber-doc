@@ -43,7 +43,7 @@ func (b *ObjectWalker) Path(key string) *ObjectWalker {
 }
 
 func (b *ObjectWalker) Exists(key string) bool {
-	return b.Path(key).Value().IsNil()
+	return b.Path(key).Value().IsValid()
 }
 
 func (b *ObjectWalker) Index(i int) *ObjectWalker {
