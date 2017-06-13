@@ -2,14 +2,17 @@
     {{range $actionN, $action := .}}
         <div data-rd-identifier="{{$action.Method|Lower}}" class="rd-collapsible-content rd-method-{{$action.Method|Lower}}">
             {{$transaction := index $action.Transactions 0}}
+            {{if not $transaction.Request.IsEmpty}}
             <header class="rd-content-header">
                 <h3 class="rd-content-head">Request</h3>
             </header>
             <div class="rd-collapsible-content-inner">
-                <div class="rd-content-block first">
-                    <h3 class="rd-content-block-head">Description</h3>
-                    <p>{{$transaction.Request.Description}}</p>
-                </div>
+                {{if $transaction.Request.Description}}
+                    <div class="rd-content-block first">
+                        <h3 class="rd-content-block-head">Description</h3>
+                        <p>{{$transaction.Request.Description}}</p>
+                    </div>
+                {{- end}}
 
                 {{if $action.Href.Parameters}}
                     <div class="rd-content-block">
@@ -73,6 +76,7 @@
                     {{- end}}
                 {{- end}}
             </div>
+            {{- end}}
 
             {{if $action.Transactions}}
                 <header class="rd-content-header">
@@ -110,6 +114,16 @@
                                                         {{template "custom_type" $customType}}
                                                     {{- end}}
                                                 {{- end}}
+
+                                                {{if .Example -}}
+                                                    <p data-rd-multi-selection="items-group" data-rd-selected="example1">
+                                                        <a href="#" data-rd-multi-selection="item" data-rd-value="example1"
+                                                           class="rd-info-label rd-active">Example-1</a>
+                                                    </p>
+                                                    <div class="rd-code-example" data-rd-multi-selection="contents">
+                                                        <pre class="rd-json-render">{{.Example}}</pre>
+                                                    </div>
+                                                {{end}}
                                             </div>
                                         {{- end}}
                                     {{- end}}

@@ -74,7 +74,7 @@ Returns a specific Post.
 
 + Response 200 (application/json)
 
-    This is a mighty example
+    Single post Resource
 
     + Body
 
@@ -121,7 +121,20 @@ Returns a specific Post.
                     "you_starred": false
                 },
                 "meta": {
-                    "code": 200,
+                    "code": 200
+                }
+            }
+
++ Response 404 (application/json)
+
+    Resource Not found
+
+    + Body
+
+            {
+                "data": {},
+                "meta": {
+                    "code": 200
                 }
             }
 
