@@ -22,15 +22,15 @@ $ make install
 
 > Note: Ensure you have installed [Go](https://golang.org/doc/install#tarball) and configured your `GOPATH` and `PATH`.
 
-### Generate HTML Documentation
+### Usage
 
-To generate HTML documentation from a RAML's specification:
+HTML from a RAML's specification:
 
 ```
 $ rubberdoc generate --spec=API.raml --config=config.yml
 ```
 
-To generate HTML documentation from a Blueprint's specification:
+HTML from a Blueprint's specification:
 
 ```
 $ rubberdoc generate --spec=API.apib --config=config.yml
@@ -101,7 +101,7 @@ USAGE:
    rubberdoc [global options] command [command options] [arguments...]
 
 VERSION:
-   v0.1-alpha
+   v0.1-alpha-2
 
 DESCRIPTION:
    Documentation's generator for RAML and Blueprint.

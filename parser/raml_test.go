@@ -3,6 +3,8 @@ package parser
 import (
 	"testing"
 
+	"os"
+
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/definition"
 	"github.com/rocket-internet-berlin/RocketLabsRubberDoc/parser/transformer"
 	"github.com/stretchr/testify/assert"
@@ -10,17 +12,21 @@ import (
 
 var apiDef *definition.Api
 
-func TestRamlParser_Integration(t *testing.T) {
+func TestMain(m *testing.M) {
 	var err error
 
 	p := NewRamlParser()
 
 	apiDef, err = p.Parse("testdata/raml/api.raml", transformer.NewRamlTransformer())
 
-	assert.Nil(t, err, "Raml parsing failed")
-	assert.IsType(t, &definition.Api{}, apiDef)
-	assert.NotNil(t, apiDef, "The api definition given is empty")
+	if err != nil {
+		panic(err)
+	}
 
+	os.Exit(m.Run())
+}
+
+func TestRamlParser_Integration(t *testing.T) {
 	t.Run("Title", assertTitle)
 	t.Run("Version", assertVersion)
 	t.Run("BaseURI", assertBaseURI)
@@ -105,10 +111,39 @@ func assertCustomTypes(t *testing.T) {
 func assertTraits(t *testing.T) {
 	t.Parallel()
 
+	var min = float64(0.0)
+
 	expectedTraits := []definition.Trait{
 		{
+			Name:  "paged",
+			Usage: "Applies limit and offset parameters to pagination purposes",
+			Href: definition.Href{
+				Path: "",
+				Parameters: []definition.Parameter{
+					{
+						Name:        "limit",
+						Description: "Description for limit property",
+						Type:        "integer",
+						Required:    false,
+						Pattern:     (*string)(nil),
+						MinLength:   (*int)(nil),
+						MaxLength:   (*int)(nil),
+						Min:         &min,
+						Max:         (*float64)(nil),
+						Example:     nil,
+					},
+				},
+			},
+			Transactions: []definition.Transaction{
+				{
+					Request:  definition.Request{},
+					Response: definition.Response{},
+				},
+			},
+		},
+		{
 			Name:  "secured",
-			Usage: "Apply to methods needing security - do not forget to also add securedBy!",
+			Usage: "Applies to methods needing security - do not forget to also add securedBy!",
 			Transactions: []definition.Transaction{
 				{
 					Request: definition.Request{
@@ -223,6 +258,8 @@ func assertSecuredBy(t *testing.T) {
 func assertResources(t *testing.T) {
 	t.Parallel()
 
+	var min = float64(0.0)
+
 	expectedResourcesGroups := []definition.ResourceGroup{
 		{
 			Title:       "",
@@ -260,6 +297,9 @@ func assertResources(t *testing.T) {
 										{
 											Name: "secured",
 										},
+										{
+											Name: "paged",
+										},
 									},
 									SecuredBy: []definition.Option{
 										{
@@ -294,11 +334,13 @@ func assertResources(t *testing.T) {
 														Description: "Query Parameter Example",
 														Type:        "date-only",
 														Required:    false,
-														Pattern:     (*string)(nil),
-														MinLength:   (*int)(nil),
-														MaxLength:   (*int)(nil),
-														Min:         (*float64)(nil),
-														Max:         (*float64)(nil),
+													},
+													{
+														Name:        "limit",
+														Description: "Description for limit property",
+														Type:        "integer",
+														Required:    false,
+														Min:         &min,
 														Example:     nil,
 													},
 												},
@@ -380,12 +422,6 @@ func assertResources(t *testing.T) {
 														Description: "Query Parameter Example",
 														Type:        "date-only",
 														Required:    false,
-														Pattern:     (*string)(nil),
-														MinLength:   (*int)(nil),
-														MaxLength:   (*int)(nil),
-														Min:         (*float64)(nil),
-														Max:         (*float64)(nil),
-														Example:     nil,
 													},
 												},
 											},
@@ -464,6 +500,9 @@ func assertResources(t *testing.T) {
 										{
 											Name: "secured",
 										},
+										{
+											Name: "paged",
+										},
 									},
 									SecuredBy: []definition.Option{
 										{
@@ -488,12 +527,13 @@ func assertResources(t *testing.T) {
 														Description: "Query Parameter Example",
 														Type:        "date-only",
 														Required:    false,
-														Pattern:     (*string)(nil),
-														MinLength:   (*int)(nil),
-														MaxLength:   (*int)(nil),
-														Min:         (*float64)(nil),
-														Max:         (*float64)(nil),
-														Example:     nil,
+													},
+													{
+														Name:        "limit",
+														Description: "Description for limit property",
+														Type:        "integer",
+														Required:    false,
+														Min:         &min,
 													},
 												},
 											},

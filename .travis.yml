@@ -7,7 +7,7 @@ os:
 before_script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install glide; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:masterminds/glide
-  -y && sudo apt-get update; sudo apt-get install -y glide; fi
+  -y && sudo apt-get update; sudo apt-get install -y --allow-unauthenticated glide; fi
 script:
 - make test
 before_deploy:
