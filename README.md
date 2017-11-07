@@ -1,9 +1,29 @@
 # RubberDoc
-A documentation generator for RAML and Blueprint
+[![Build Status](https://travis-ci.org/rocket-internet-berlin/RocketLabsRubberDoc.svg?branch=master)](https://travis-ci.org/rocket-internet-berlin/RocketLabsRubberDoc)
+
+Table of Contents
+=================
+
+* [What is RubberDoc](#what-is-rubberdoc)
+* [Installation](#installation)
+  * [Using the release](#using-the-release)
+  * [Using the source](#using-the-source)
+* [Configuration](#configuration)
+* [Usage](#usage)
+* [Help](#help)
+* [Examples](#examples)
+* [Contribute](#contribute)
+* [CREDITS](#credits)
+
+
+## What is RubberDoc
+RubberDoc was designed to support api's documentation generation based on RAML and Blueprint.
 
 ## Installation
 
 The latest executables for supported platforms are available from the [release page](https://github.com/rocket-internet-berlin/RocketLabsRubberDoc/releases).
+
+### Using the release
 
 Just extract and start using it:
 
@@ -12,7 +32,7 @@ $ wget https://github.com/rocket-internet-berlin/RocketLabsRubberDoc/releases/do
 $ tar -zxvf rubberdoc-${version}.${os}-${arch}.tar.gz
 $ ./rubberdoc -h
 ```
-### Manual
+### Using the source
 
 ```sh
 $ git clone https://github.com/rocket-internet-berlin/RocketLabsRubberDoc.git
@@ -22,23 +42,7 @@ $ make install
 
 > Note: Ensure you have installed [Go](https://golang.org/doc/install#tarball) and configured your `GOPATH` and `PATH`.
 
-### Usage
-
-HTML from a RAML's specification:
-
-```
-$ rubberdoc generate --spec=API.raml --config=config.yml
-```
-
-HTML from a Blueprint's specification:
-
-```
-$ rubberdoc generate --spec=API.apib --config=config.yml
-```
-
-> Note: Check [Configuration](#configuration) section to how to build your config.yml file.
-
-#### Configuration
+## Configuration
 The configuration is used to provide to the generator the location os the templates and how the will be generate and also the output's destination.
 
 ##### Global
@@ -89,6 +93,22 @@ templates:
 ```
 To see how the configuration looks like, you can see it for the `try-it-out` located in [try-it-out/templates/config.yaml](try-it-out/templates/config.yaml).
 
+## Usage
+
+HTML from a RAML's specification:
+
+```
+$ rubberdoc generate --spec=API.raml --config=config.yml
+```
+
+HTML from a Blueprint's specification:
+
+```
+$ rubberdoc generate --spec=API.apib --config=config.yml
+```
+
+> Note: Check [Configuration](#configuration) section to how to build your config.yml file.
+
 ## Help
 
 As usual, you can also see all supported flags by passing `-h`:
@@ -129,3 +149,15 @@ Using Blueprint's specification:
 ```
 $ rubberdoc generate --spec=examples/spec/blueprint/simple.apib --config=try-it-out/templates/config.yaml
 ```
+
+## Contribute
+
+When you want to contribute to the development, follow the [contribution guidelines](contributing.md).
+
+## CREDITS
+
+- [Jumpscale/go-raml](https://github.com/Jumpscale/go-raml) for the raml parser.
+- [apiaryio/drafter](https://github.com/apiaryio/drafter) for the Drafter library used by blueprint parser.
+- [Sirupsen/logrus](https://github.com/Sirupsen/logrus) for the logging library.
+- [urfave/cli](https://github.com/urfave/cli) for the cli library.
+- [stretchr/testify](https://github.com/stretchr/testify) for the Assert package.
