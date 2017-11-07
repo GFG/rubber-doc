@@ -1,5 +1,5 @@
-hash: 4251f8cdf85f62713fffb19eae62a5eef39727ec63f3ea874973f86ee070874e
-updated: 2017-03-21T10:01:08.518232607+01:00
+hash: 7a40c9e7ec9fca899d19982cc829df54d844c81a6146b502bef1dafe922855b2
+updated: 2017-11-06T09:05:27.914428812+01:00
 imports:
 - name: bitbucket.org/pkg/inflect
   version: 8961c3750a47b8c0b3e118d52513b97adf85a7e8
@@ -11,7 +11,7 @@ imports:
 - name: github.com/gigforks/yaml
   version: 3396035bfe07c24995d93599a57cf12f9d1c58e4
 - name: github.com/Jumpscale/go-raml
-  version: e0ddd7c7d63fb8d9793babf308fe7b99544a1794
+  version: 4bda80b1afb54efbc28f9fb30701da3b9e2e7175
   subpackages:
   - raml
 - name: github.com/kr/pretty
@@ -23,9 +23,9 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/urfave/cli
-  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
 - name: golang.org/x/sys
-  version: e24f485414aeafb646f6fca458b0bf869c0880a1
+  version: 8eb05f94d449fdf134ec24630ce69ada5b469c1c
   subpackages:
   - unix
 testImports:
@@ -38,6 +38,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
+  version: 2aa2c176b9dab406a6970f6a55f513e8a8c8b18f
   subpackages:
   - assert

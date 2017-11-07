@@ -454,7 +454,7 @@ func (tra *RamlTransformer) handleBodies(ramlBodies *raml.Bodies) (bodies []defi
 		body.MediaType = definition.MediaType("application/json")
 
 		// t will be the body's type
-		bodyType := tra.removeLibraryName(ramlBodies.ApplicationJSON.Type)
+		bodyType := tra.removeLibraryName(ramlBodies.ApplicationJSON.TypeString())
 
 		// If properties is empty then it is not a api's CustomType
 		if ramlBodies.ApplicationJSON.Properties != nil {

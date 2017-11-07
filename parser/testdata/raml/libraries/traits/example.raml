@@ -2,9 +2,18 @@
 traits:
   secured:
     displayName: "Secured"
-    usage: Apply to methods needing security - do not forget to also add securedBy!
+    usage: Applies to methods needing security - do not forget to also add securedBy!
     headers:
       Authorization:
         type: string
         displayName: Authorization
         example: Bearer czZCaGRSa3F0MzpnWDFmQmF0M2JW
+  paged:
+    usage: Applies limit and offset parameters to pagination purposes
+    queryParameters:
+      limit:
+        description: Description for limit property
+        type: integer
+        default: 30
+        minimum: 0
+        required: false

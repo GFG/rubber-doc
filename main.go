@@ -15,7 +15,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "RubberDoc"
-	app.Version = "v0.1-alpha"
+	app.Version = "v0.1-alpha-2"
 	app.Description = "A documentation generator for RAML and Blueprint."
 	app.Usage = ""
 
