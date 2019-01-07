@@ -4,7 +4,7 @@
 Table of Contents
 =================
 
-* [What is RubberDoc](#what-is-rubberdoc)
+* [What is RubberDoc](#what-is-rubberdoc) 
 * [Installation](#installation)
   * [Using the release](#using-the-release)
   * [Using the source](#using-the-source)
