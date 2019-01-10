@@ -1,4 +1,4 @@
-# RubberDoc
+# RubberDoc!
 [![Build Status](https://travis-ci.org/rocket-internet-berlin/RocketLabsRubberDoc.svg?branch=master)](https://travis-ci.org/rocket-internet-berlin/RocketLabsRubberDoc)
 
 Table of Contents
